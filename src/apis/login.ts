@@ -1,5 +1,3 @@
-// src/api/api.ts
-
 export interface SignupRequest {
   email: string;
   password: string;
@@ -7,7 +5,6 @@ export interface SignupRequest {
   nickname: string;
 }
 
-// 회원가입 API 요청
 export const signup = async ({
   email,
   password,
@@ -29,7 +26,6 @@ export const signup = async ({
   return await response.json();
 };
 
-// 회원정보 조회 API 요청
 export const getUserInfo = async () => {
   const response = await fetch("/users/edit", {
     method: "GET",
