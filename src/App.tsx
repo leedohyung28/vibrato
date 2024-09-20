@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./routes/Home";
 import Chart from "./routes/chart/chart";
 import Artist from "./routes/artist/artist";
+import Album from "./routes/album/album";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Chart" element={<Chart />} />
           <Route path="/Artist" element={<Artist />} />
+          <Route path="/Album" element={<Album />} />
         </Routes>
       </div>
     </Router>
