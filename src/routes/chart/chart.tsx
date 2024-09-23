@@ -1,38 +1,35 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
-import { fetchGlobalWeeklyTop50, searchAll } from "../../apis/chat";
 import {
-  ChartResponse,
-  ArtistResponse,
-  mockArtistsData,
-} from "../../apis/mockData";
+  fetchKoreaTop50,
+  fetchGlobalTop50,
+  fetchKoreaWeeklyTop50,
+  fetchGlobalWeeklyTop50,
+  fetchKoreaRecentTracks,
+  fetchAnimaRnBChart,
+  Track,
+} from "../../apis/chat";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
 
 const ChartPage = () => {
-  const [chartData, setChartData] = useState<ChartResponse[]>([]);
-  const [artistData, setArtistData] = useState<ArtistResponse[]>([]);
-  const [filteredData, setFilteredData] = useState<
-    (ChartResponse | ArtistResponse)[]
-  >([]);
+  const [chartData, setChartData] = useState<Track[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [searchContent, setSearchContent] = useState<string>("");
-  const [activeTab, setActiveTab] = useState<"앨범" | "아티스트">("앨범");
+  const [activeTab, setActiveTab] = useState<string>("Top 50 한국");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedGenre, setSelectedGenre] = useState<string>("");
-
+  const [contentType, setContentType] = useState<string>("앨범");
   const itemsPerPage = 10;
+  const maxPageDisplay = 10;
+  const [pageStart, setPageStart] = useState<number>(1);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await fetchGlobalWeeklyTop50();
 
-        setChartData(data as ChartResponse[]);
-        setFilteredData(data as ChartResponse[]);
-        setArtistData(mockArtistsData);
+        // 기본적으로 Top 50 한국 데이터를 로드
+        const data = await fetchKoreaTop50();
+        setChartData(data);
       } catch (err) {
         setError("데이터를 가져오는 데 실패했습니다.");
       } finally {
@@ -43,56 +40,43 @@ const ChartPage = () => {
     fetchData();
   }, []);
 
-  const handleSearch = async () => {
-    if (!searchContent.trim()) {
-      setError("검색어를 입력해주세요.");
-      return;
-    }
+  const handleTabClick = async (tab: string) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+    setPageStart(1);
 
     try {
       setLoading(true);
       setError("");
-      const data = await searchAll(searchContent);
 
-      if (activeTab === "앨범") {
-        setFilteredData((data as { tracks: ChartResponse[] }).tracks);
-      } else {
-        const filteredArtists = mockArtistsData.filter((artist) =>
-          artist.name.includes(searchContent)
-        );
-        setFilteredData(filteredArtists);
+      switch (tab) {
+        case "Top 50 한국":
+          setChartData(await fetchKoreaTop50());
+          break;
+        case "Top 50 글로벌":
+          setChartData(await fetchGlobalTop50());
+          break;
+        case "주간 Top 50 한국":
+          setChartData(await fetchKoreaWeeklyTop50());
+          break;
+        case "주간 Top 50 글로벌":
+          setChartData(await fetchGlobalWeeklyTop50());
+          break;
+        case "최신 노래 한국":
+          setChartData(await fetchKoreaRecentTracks());
+          break;
+        case "Anima R&B":
+          setChartData(await fetchAnimaRnBChart());
+          break;
+        default:
+          setChartData([]);
+          setError("유효하지 않은 탭입니다.");
+          break;
       }
     } catch (err) {
-      setError("검색 데이터 가져오는데 실패했습니다.");
+      setError(`${tab} 데이터를 가져오는 데 실패했습니다.`);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleTabClick = (tab: "앨범" | "아티스트") => {
-    setActiveTab(tab);
-    setCurrentPage(1);
-    if (tab === "앨범") {
-      setFilteredData(chartData);
-    } else {
-      setFilteredData(artistData);
-    }
-  };
-
-  const handleGenreFilter = (genre: string) => {
-    setSelectedGenre(genre);
-    if (activeTab === "앨범") {
-      setFilteredData(
-        chartData.filter((item) =>
-          item.album_artists.some((artist) =>
-            artist.artists_name.includes(genre)
-          )
-        )
-      );
-    } else {
-      setFilteredData(
-        artistData.filter((artist) => artist.genres.includes(genre))
-      );
     }
   };
 
@@ -100,11 +84,18 @@ const ChartPage = () => {
     setCurrentPage(page);
   };
 
+  const handleNextPageSet = () => {
+    setPageStart((prev) => prev + maxPageDisplay);
+  };
+
+  const handlePrevPageSet = () => {
+    setPageStart((prev) => Math.max(1, prev - maxPageDisplay));
+  };
+
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const paginatedData = chartData.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(chartData.length / itemsPerPage);
+  const pageEnd = Math.min(pageStart + maxPageDisplay - 1, totalPages);
 
   if (loading) {
     return (
@@ -120,121 +111,115 @@ const ChartPage = () => {
 
   return (
     <div className="flex">
+      {/* 왼쪽 콘텐츠 부분 */}
       <div className="flex-1 p-4">
-        <h2 className="text-2xl font-bold mb-4">최신 발매</h2>
+        <h2 className="text-2xl font-bold mb-4">{activeTab}</h2>
         <div className="flex space-x-4 mb-4">
-          <button
-            onClick={() => handleTabClick("앨범")}
-            className={`px-4 py-2 rounded ${
-              activeTab === "앨범" ? "bg-gray-300" : ""
-            }`}
-          >
-            앨범
-          </button>
-          <button
-            onClick={() => handleTabClick("아티스트")}
-            className={`px-4 py-2 rounded ${
-              activeTab === "아티스트" ? "bg-gray-300" : ""
-            }`}
-          >
-            아티스트
-          </button>
+          {/* 앨범 / 노래 선택 */}
+          {["앨범", "노래"].map((type) => (
+            <button
+              key={type}
+              onClick={() => setContentType(type)}
+              className={`px-4 py-2 rounded ${
+                contentType === type ? "bg-gray-300" : ""
+              }`}
+            >
+              {type}
+            </button>
+          ))}
         </div>
-        {paginatedData.map((item) => (
-          <div key={item.id} className="flex mb-4 p-4 border rounded-md">
-            <img
-              src={"album_image" in item ? item.album_image : item.image}
-              alt={item.name}
-              className="w-32 h-32 mr-4"
-            />
-            <div>
-              <h3 className="text-xl font-semibold">{item.name}</h3>
-              {activeTab === "앨범" && (
-                <>
-                  <div className="flex space-x-2 my-2">
-                    {(item as ChartResponse).album_artists.map((artist) => (
-                      <span key={artist.artists_name}>
-                        {artist.artists_name}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    발매일: {(item as ChartResponse).release_date}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    별점: {(item as ChartResponse).rated} / 5.0
-                  </p>
-                </>
-              )}
-              {activeTab === "아티스트" && (
-                <>
-                  <p className="text-sm text-gray-600">
-                    장르: {(item as ArtistResponse).genres.join(", ")}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    별점: {(item as ArtistResponse).rated} / 5.0
-                  </p>
-                </>
-              )}
+        {/* 데이터가 배열인지 확인 */}
+        {Array.isArray(paginatedData) && paginatedData.length > 0 ? (
+          paginatedData.map((item) => (
+            <div key={item.id} className="flex mb-4 p-4 border rounded-md">
+              <img
+                src={item.album_image}
+                alt={item.album_name}
+                className="w-32 h-32 mr-4"
+              />
+              <div>
+                <h3 className="text-xl font-semibold">{item.name}</h3>
+                <div className="flex space-x-2 my-2">
+                  {item.album_artists.map((artist) => (
+                    <span key={artist.id}>{artist.name}</span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600">
+                  발매일: {item.release_date}
+                </p>
+                <p className="text-sm text-gray-600">
+                  별점: {item.rated} / 5.0
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div className="text-gray-600">데이터가 없습니다.</div>
+        )}
+
         {/* Pagination */}
-        <div className="flex justify-center space-x-2 mt-4">
-          {Array.from(
-            { length: Math.ceil(filteredData.length / itemsPerPage) },
-            (_, index) => (
+        {chartData.length > 0 && (
+          <div className="flex justify-center space-x-2 mt-4">
+            {/* 이전 페이지 세트로 이동 */}
+            {pageStart > 1 && (
               <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === index + 1 ? "bg-gray-300" : ""
-                }`}
+                onClick={handlePrevPageSet}
+                className="px-3 py-1 rounded bg-gray-300"
               >
-                {index + 1}
+                &lt;
               </button>
-            )
-          )}
-        </div>
-      </div>
-      <div className="w-1/3 p-4">
-        <h2 className="text-2xl font-bold mb-4">필터</h2>
-        <div className="border p-4 rounded-md">
-          <input
-            type="text"
-            placeholder="검색 내용"
-            value={searchContent}
-            onChange={(e) => setSearchContent(e.target.value)}
-            className="border rounded p-2 w-full mb-4"
-          />
-          <button
-            onClick={handleSearch}
-            className="bg-gray-300 px-4 py-2 rounded w-full"
-          >
-            검색
-          </button>
-          <div className="mt-4">
-            <h3 className="text-lg font-bold mb-2">장르별</h3>
-            {[
-              "Rock",
-              "Pop",
-              "Jazz",
-              "Funk",
-              "Disco",
-              "Electronic",
-              "Metal",
-            ].map((genre) => (
+            )}
+
+            {Array.from(
+              { length: pageEnd - pageStart + 1 },
+              (_, index) => pageStart + index
+            ).map((page) => (
               <button
-                key={genre}
-                onClick={() => handleGenreFilter(genre)}
-                className={`px-2 py-1 m-1 rounded ${
-                  selectedGenre === genre ? "bg-gray-300" : ""
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === page ? "bg-gray-300" : ""
                 }`}
               >
-                {genre}
+                {page}
               </button>
             ))}
+
+            {/* 다음 페이지 세트로 이동 */}
+            {pageEnd < totalPages && (
+              <button
+                onClick={handleNextPageSet}
+                className="px-3 py-1 rounded bg-gray-300"
+              >
+                &gt;
+              </button>
+            )}
           </div>
+        )}
+      </div>
+
+      {/* 오른쪽 필터 부분 */}
+      <div className="w-1/4 p-4 bg-white shadow-md h-screen">
+        <h2 className="text-2xl font-bold mb-4">플레이 리스트</h2>
+        <div className="border p-4 rounded-md">
+          {[
+            "Top 50 한국",
+            "Top 50 글로벌",
+            "주간 Top 50 한국",
+            "주간 Top 50 글로벌",
+            "최신 노래 한국",
+            "Anima R&B",
+          ].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabClick(tab)}
+              className={`px-4 py-2 m-2 w-full text-left rounded ${
+                activeTab === tab ? "bg-gray-300" : ""
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
     </div>
