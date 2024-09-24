@@ -19,6 +19,9 @@ const Profile: React.FC = () => {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const [signupEmail, setSignupEmail] = useState<string>("");
+  const [signupPassword, setSignupPassword] = useState<string>("");
   const [signupNickname, setSignupNickname] = useState<string>("");
 
   const handleError = (error: FirebaseError) => {
@@ -48,8 +51,8 @@ const Profile: React.FC = () => {
     e.preventDefault();
     
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      await signup({ email, password, image_id: 1, nickname: signupNickname });
+      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      await signup({ email: signupEmail, password: signupPassword, image_id: 1, nickname: signupNickname });
       alert("회원가입 성공");
       closeModal(); // 모달 닫기
     } catch (error) {
@@ -167,15 +170,15 @@ const Profile: React.FC = () => {
               <Input 
                 type="email" 
                 placeholder="이메일" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+                value={signupEmail} 
+                onChange={(e) => setSignupEmail(e.target.value)} 
                 required 
               />
               <Input 
                 type="password" 
                 placeholder="비밀번호" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+                value={signupPassword} 
+                onChange={(e) => setSignupPassword(e.target.value)} 
                 required 
               />
               <Input 

@@ -46,7 +46,7 @@ export const getUserInfo = async ({
   const token = getToken();
 
   const response = await fetch("/auth/user", {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: token ? token : "",
