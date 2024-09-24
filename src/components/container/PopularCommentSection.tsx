@@ -80,7 +80,7 @@ const PopularCommentSection = () => {
 
   return (
     <section className="col-span-8 p-4 bg-white">
-      <a href="comment" className="text-xl font-bold">
+      <a href="PopularCommentDetail" className="text-xl font-bold">
         최근 인기 코멘트 ＞
       </a>
 
