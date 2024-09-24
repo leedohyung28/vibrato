@@ -11,7 +11,7 @@ const SearchBar = () => {
       <input
         type="text"
         placeholder="검색"
-        className="bg-gray-200 rounded-full pl-12 py-2 w-96 focus:outline-none"
+        className="bg-searchBar rounded-full w-full pl-9 py-1.5 focus:outline-none"
       />
     </div>
   );

@@ -8,7 +8,7 @@ import Album from "./routes/album/album";
 import ArtistComment from "./routes/comment/ArtistComment";
 import ArtistCommentDetail from "./routes/comment/ArtistCommentDetail";
 import Track from "./routes/track/track";
-
+import PopularCommentDetail from "./routes/comment/PopularCommentDetail";
 function App() {
   return (
     <Router>
@@ -24,6 +24,10 @@ function App() {
           <Route
             path="/ArtistCommentDetail"
             element={<ArtistCommentDetail />}
+          />
+          <Route
+            path="/PopularCommentDetail"
+            element={<PopularCommentDetail />}
           />
 
           <Route path="/Track" element={<Track />} />
