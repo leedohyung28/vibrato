@@ -7,6 +7,9 @@ const Navigation = () => {
       <a href="artist" className="hover:text-red-500">
         아티스트
       </a>
+      <a href="album" className="hover:text-red-500">
+        앨범
+      </a>
     </nav>
   );
 };
