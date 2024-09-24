@@ -3,13 +3,16 @@ import { getUserInfo, signup } from "../apis/login";
 import Modal from "./Modal";
 import styled from "styled-components";
 import { auth } from "../firebase"; // Firebase 초기화 파일
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useAuthStore } from "../store/authStore";
 
 const Profile: React.FC = () => {
-
-  const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout } = useAuthStore();
+  const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout } =
+    useAuthStore();
 
   // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   // const [nickname, setNickname] = useState<string>("");
@@ -44,15 +47,20 @@ const Profile: React.FC = () => {
         return "이메일 혹은 비밀번호가 틀렸습니다.";
       default:
         return "로그인에 실패 하였습니다.";
-    }  
-  }; 
+    }
+  };
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     try {
       await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
-      await signup({ email: signupEmail, password: signupPassword, image_id: 1, nickname: signupNickname });
+      await signup({
+        email: signupEmail,
+        password: signupPassword,
+        image_id: 1,
+        nickname: signupNickname,
+      });
       alert("회원가입 성공");
       closeModal(); // 모달 닫기
     } catch (error) {
@@ -60,7 +68,9 @@ const Profile: React.FC = () => {
       if (error instanceof FirebaseError) {
         alert("회원가입 실패: " + handleError(error));
       } else if (error == "Error: 회원가입 api 연동 필요") {
-        alert("회원가입 실패: Firebase에 유저 추가 완료, 하지만 회원가입 api 연동 필요")
+        alert(
+          "회원가입 실패: Firebase에 유저 추가 완료, 하지만 회원가입 api 연동 필요"
+        );
         closeModal(); // 모달 닫기
       } else {
         alert("회원가입 실패: 알 수 없는 오류가 발생했습니다." + error);
@@ -70,9 +80,13 @@ const Profile: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password); // 입력된 이메일과 비밀번호 사용
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ); // 입력된 이메일과 비밀번호 사용
       const user = userCredential.user;
       const uid = user.uid;
 
@@ -96,7 +110,9 @@ const Profile: React.FC = () => {
       if (error instanceof FirebaseError) {
         alert("회원 정보 조회 실패: " + handleError(error));
       } else if (error == "Error: 로그인 api 연동 필요") {
-        alert("로그인 실패: Firebase를 통한 로그인 완료, 하지만 로그인 api 연동 필요")
+        alert(
+          "로그인 실패: Firebase를 통한 로그인 완료, 하지만 로그인 api 연동 필요"
+        );
       } else {
         alert("로그인 실패: 알 수 없는 오류가 발생했습니다." + error);
       }
@@ -123,78 +139,82 @@ const Profile: React.FC = () => {
   return (
     <div>
       {isLoggedIn ? (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 justify-end">
           <img
             src={profileImageUrl}
             alt="Profile"
             className="w-8 h-8 rounded-full bg-red-300"
           />
-          <span className="text-gray-600">{nickname}님</span>
-          <button onClick={handleLogout} className="text-gray-600">
+          <span className="text-gray_dark">{nickname}님</span>
+          <button onClick={handleLogout} className="text-gray_dark">
             로그아웃
           </button>
         </div>
       ) : (
-        <div className="flex space-x-4">
-          <button onClick={() => openModal('login')} className="text-gray-600">
+        <div className="flex space-x-4 justify-end">
+          <button onClick={() => openModal("login")} className="text-gray_dark">
             로그인
           </button>
-          <button onClick={() => openModal('signup')} className="text-gray-600">
+          <button
+            onClick={() => openModal("signup")}
+            className="text-gray_dark"
+          >
             회원가입
           </button>
         </div>
       )}
-      
+
       {showModal && (
-        <Modal title={modalType === 'login' ? '로그인' : '회원가입'} onClose={closeModal}>
-          {modalType === 'login' ? (
+        <Modal
+          title={modalType === "login" ? "로그인" : "회원가입"}
+          onClose={closeModal}
+        >
+          {modalType === "login" ? (
             <Form onSubmit={handleLogin}>
-              <Input 
-                type="email" 
-                placeholder="이메일" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
+              <Input
+                type="email"
+                placeholder="이메일"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <Input 
-                type="password" 
-                placeholder="비밀번호" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
+              <Input
+                type="password"
+                placeholder="비밀번호"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <SubmitButton type="submit">로그인</SubmitButton>
             </Form>
           ) : (
             <Form onSubmit={handleSignup}>
-              <Input 
-                type="email" 
-                placeholder="이메일" 
-                value={signupEmail} 
-                onChange={(e) => setSignupEmail(e.target.value)} 
-                required 
+              <Input
+                type="email"
+                placeholder="이메일"
+                value={signupEmail}
+                onChange={(e) => setSignupEmail(e.target.value)}
+                required
               />
-              <Input 
-                type="password" 
-                placeholder="비밀번호" 
-                value={signupPassword} 
-                onChange={(e) => setSignupPassword(e.target.value)} 
-                required 
+              <Input
+                type="password"
+                placeholder="비밀번호"
+                value={signupPassword}
+                onChange={(e) => setSignupPassword(e.target.value)}
+                required
               />
-              <Input 
-                type="text" 
-                placeholder="닉네임" 
-                value={signupNickname} 
-                onChange={(e) => setSignupNickname(e.target.value)} 
-                required 
+              <Input
+                type="text"
+                placeholder="닉네임"
+                value={signupNickname}
+                onChange={(e) => setSignupNickname(e.target.value)}
+                required
               />
               <SubmitButton type="submit">회원가입</SubmitButton>
             </Form>
           )}
-
         </Modal>
       )}
-      
     </div>
   );
 };
@@ -213,24 +233,18 @@ const Input = styled.input`
 
 const SubmitButton = styled.button`
   padding: 10px;
-  background-color: #C07777;
+  background-color: #c07777;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 
   &:hover {
-    background-color: #AF6363;
+    background-color: #af6363;
   }
 `;
 
 export default Profile;
-
-
-
-
-
-
 
 // import { useState } from "react";
 // import { getUserInfo, signup } from "../apis/login";
@@ -254,7 +268,6 @@ export default Profile;
 //       alert("회원가입 실패");
 //     }
 //   };
-
 
 //   const handleLogin = async () => {
 //     try {

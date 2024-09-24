@@ -19,7 +19,91 @@ export interface ArtistResponse {
   genres: string[];
 }
 
+export interface ReviewResponse {
+  review_id: number;
+  user_uid: number;
+  rated: number;
+  contents: string;
+  title: string;
+  type_id: number;
+  comment_id: number;
+  created_at: string;
+  updated_at: string;
+  liked: number;
+  comments: string[];
+}
+
 // 목데이터
+
+export const reviewDummyData: ReviewResponse[] = [
+  {
+    review_id: 1,
+    user_uid: 101,
+    rated: 4.5,
+    contents:
+      "이 앨범은 정말 놀랍습니다. 모든 트랙이 완벽하게 어우러져 있어요.",
+    title: "놀라운 앨범",
+    type_id: 1,
+    comment_id: 1001,
+    created_at: "2023-09-20T12:00:00Z",
+    updated_at: "2023-09-21T12:00:00Z",
+    liked: 0,
+    comments: [],
+  },
+  {
+    review_id: 2,
+    user_uid: 102,
+    rated: 5,
+    contents: "정말 최고입니다! 올해 최고의 앨범이라고 생각합니다.",
+    title: "최고의 앨범",
+    type_id: 1,
+    comment_id: 1002,
+    created_at: "2023-09-21T10:30:00Z",
+    updated_at: "2023-09-22T12:30:00Z",
+    liked: 0,
+    comments: [],
+  },
+  {
+    review_id: 3,
+    user_uid: 103,
+    rated: 3.5,
+    contents: "몇몇 트랙은 좋았지만, 전체적으로는 조금 아쉬웠어요.",
+    title: "괜찮은 앨범",
+    type_id: 2,
+    comment_id: 1003,
+    created_at: "2023-09-22T08:15:00Z",
+    updated_at: "2023-09-22T09:15:00Z",
+    liked: 0,
+    comments: [],
+  },
+  {
+    review_id: 4,
+    user_uid: 104,
+    rated: 2,
+    contents: "기대했던 만큼의 완성도는 아니었습니다. 다음 앨범을 기대할게요.",
+    title: "아쉬운 앨범",
+    type_id: 3,
+    comment_id: 1004,
+    created_at: "2023-09-23T13:45:00Z",
+    updated_at: "2023-09-23T14:45:00Z",
+    liked: 0,
+    comments: [],
+  },
+  {
+    review_id: 5,
+    user_uid: 105,
+    rated: 4,
+    contents: "전체적으로 훌륭했어요. 다시 듣고 싶은 트랙이 많습니다.",
+    title: "훌륭한 앨범",
+    type_id: 2,
+    comment_id: 1005,
+    created_at: "2023-09-24T09:20:00Z",
+    updated_at: "2023-09-24T10:20:00Z",
+    liked: 0,
+    comments: [],
+  },
+];
+
 export const mockChartData: ChartResponse[] = [
   {
     name: "노래 1",
