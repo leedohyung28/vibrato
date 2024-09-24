@@ -1,34 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 
-interface AlbumContainerProps {
-  name: string;
-  artists: string;
-  release_date: string;
-  avg_rated: number;
-  genres: string;
-}
-
-const AlbumContainer: React.FC<AlbumContainerProps> = ({ name, artists, release_date, avg_rated }) => {
-  return (
-    <Container>
-      <AlbumCover src="https://loremflickr.com/320/240?random=1" alt="앨범 커버" />
-      <SongDetails>
-        <AlbumTitle>{name}</AlbumTitle>
-        <ArtistName>{artists}</ArtistName>
-        <ReleasedDate>{release_date}</ReleasedDate>
-        <Rating>평균 별점: {avg_rated}</Rating>
-        {/* <Genre>{genres}</Genre> */}
-        <IconsContainer>
-          <Icon /> <Icon /> <Icon /> <Icon />
-        </IconsContainer>
-        <StarsContainer>
-          like, 코멘트 추가, 별점
-        </StarsContainer>
-      </SongDetails>
-    </Container>
-  );
-};
+const TrackContainer: React.FC = () => {
+    return (
+      <Container>
+        <AlbumCover src="https://loremflickr.com/320/240?random=1" alt="앨범 커버" />
+        <SongDetails>
+          <AlbumTitle>노래 제목</AlbumTitle>
+          <ArtistName>아티스트 이름</ArtistName>
+          <ReleasedDate>앨범 제목</ReleasedDate>
+          <Rating>별점</Rating>
+          <Genre>장르</Genre>
+          <IconsContainer>
+            <Icon /> <Icon /> <Icon /> <Icon />
+          </IconsContainer>
+          <StarsContainer>
+            like, 코멘트 추가, 별점
+          </StarsContainer>
+        </SongDetails>
+      </Container>
+    );
+  };
 
 const Container = styled.div`
   display: grid;
@@ -77,11 +69,11 @@ const Rating = styled.p`
   font-size: 0.9rem;
 `;
 
-// const Genre = styled.p`
-//   margin: 0;
-//   color: #666;
-//   font-size: 0.9rem;
-// `;
+const Genre = styled.p`
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+`;
 
 const IconsContainer = styled.div`
   display: flex;
@@ -100,4 +92,4 @@ const StarsContainer = styled.div`
   gap: 5px;
 `;
 
-export default AlbumContainer;
+export default TrackContainer;

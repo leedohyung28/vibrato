@@ -1,29 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import AlbumContainer from "../../components/container/AlbumContainer";
 import CommentSection from "../../components/CommentSection";
-import TrackList from "../../components/TrackList";
-import useAlbumDetail from "../../apis/album";
+import TrackContainer from "../../components/container/TrackContainer";
+import Lyrics from "../../components/Lyrics";
 
-const Album: React.FC = () => {
-    const { album, loading, error } = useAlbumDetail("1");
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!album) return <div>No data available</div>;
-    
+const Track: React.FC = () => {
     return (
       <Container>
-        <Item1><AlbumContainer 
-            name={album.name}
-            artists={album.artists_names.join(", ")}
-            release_date={album.release_date}
-            avg_rated={album.avg_rated}
-            genres={album.genres.join(", ")}/></Item1>
+        <Item1><TrackContainer /></Item1>
         <Item2><CommentSection /></Item2>
-        <Item3><TrackList /></Item3>
-        {/* <Item2><CommentSection comments={album.comments}/></Item2>
-        <Item3><TrackList tracks={album.tracks}/></Item3> */}
+        <Item3><Lyrics /></Item3>
       </Container>
     );
   };
@@ -59,4 +45,4 @@ const Item3 = styled.div`
   padding: 20px;
 `;
 
-export default Album;
+export default Track;
