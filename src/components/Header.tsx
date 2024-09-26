@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <header>
       <div className="container mx-auto grid grid-cols-12 h-16 px-5 gap-10 font-semibold items-center">
-        <div className="col-span-2 ">
+        <div className="col-span-2">
           <Logo />
         </div>
         <div className="col-span-2">

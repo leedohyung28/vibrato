@@ -1,6 +1,7 @@
 import { ReviewResponse, reviewDummyData } from "../../apis/mockData";
 import { useEffect, useState } from "react";
 import spotifyLogo from "../../assets/spotify.png";
+import { renderStars } from "../StarRating";
 
 const PopularCommentSection = () => {
   const [reviews, setReviews] = useState<ReviewResponse[]>([]);
@@ -80,8 +81,11 @@ const PopularCommentSection = () => {
 
   return (
     <section className="col-span-8 p-4 bg-white">
-      <a href="PopularCommentDetail" className="text-xl font-bold">
-        최근 인기 코멘트 ＞
+      <a
+        href="PopularCommentDetail"
+        className="text-2xl font-bold hover:underline hover:decoration-coral hover:decoration-4 hover:underline-offset-8"
+      >
+        최근 인기 코멘트
       </a>
 
       <div className="space-y-4 my-4">
@@ -91,7 +95,7 @@ const PopularCommentSection = () => {
         {reviews.map((review) => (
           <div
             key={review.review_id}
-            className="bg-white shadow-xl p-4 rounded-md border border-gray-200"
+            className="bg-white shadow-xl p-4 rounded-md border border-gray_border"
           >
             {" "}
             {/* 개별 박스 */}
@@ -103,9 +107,7 @@ const PopularCommentSection = () => {
               />
               {/* 앨범 커버 */}
               <div className="ml-4 flex-grow flex flex-col justify-between py-4">
-                <span className="text-yellow text-5xl">
-                  {"★".repeat(Math.floor(review.rated))} {/* 별점 */}
-                </span>
+                {renderStars(review.rated)} {/* 별점 */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <span className="w-10 h-10 rounded-full bg-coral"></span>
@@ -127,7 +129,9 @@ const PopularCommentSection = () => {
                 <h4 className="font-bold text-lg truncate">앨범 제목</h4>
                 <p className="text-sm text-gray_dark truncate">아티스트 이름</p>
                 <p className="text-sm text-gray_dark">앨범 발매일</p>
-                <p className="text-sm text-gray-500">★ {review.rated} / 5.0</p>
+                <p className="text-sm text-gray-500">
+                  ★ {review.rated} / 5.0 | 🗎 평가수
+                </p>
                 <div className="mt-4 flex space-x-4">
                   <a href="https://www.spotify.com" target="_blank">
                     <img
@@ -144,7 +148,7 @@ const PopularCommentSection = () => {
                 <p className="text-sm text-gray_dark ml-2">{review.contents}</p>
               </div>
             </div>
-            {/*코멘트*/}
+            {/*댓글*/}
             <div className="mt-4 flex">
               <div className="flex items-center mr-8">
                 <button
@@ -155,7 +159,7 @@ const PopularCommentSection = () => {
                   }`}
                   onClick={() => toggleLike(review.review_id)}
                 >
-                  좋아요 👍 {review.liked}
+                  좋아요 👍︎ {review.liked}
                 </button>
               </div>
               <div className="flex items-center">
@@ -163,7 +167,7 @@ const PopularCommentSection = () => {
                   className="text-lg font-bold text-gray_dark"
                   onClick={() => toggleComments(review.review_id)}
                 >
-                  코멘트 💬 {review.comments.length}
+                  댓글 🗨️ {review.comments.length}
                 </button>
               </div>
             </div>

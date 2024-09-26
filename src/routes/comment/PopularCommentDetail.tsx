@@ -163,7 +163,7 @@ const PopularCommentDetail: React.FC = () => {
                     className="text-lg font-bold text-gray_dark"
                     onClick={() => toggleComments(review.review_id)}
                   >
-                    코멘트 💬 {review.comments.length}
+                    댓글 💬 {review.comments.length}
                   </button>
                 </div>
               </div>
@@ -185,7 +185,7 @@ const PopularCommentDetail: React.FC = () => {
                     ))
                   ) : (
                     <p className="text-sm px-2 text-gray_dark">
-                      코멘트가 없습니다.
+                      댓글이 없습니다.
                     </p>
                   )}
 
@@ -204,7 +204,7 @@ const PopularCommentDetail: React.FC = () => {
                       onClick={() => addComment(review.review_id)}
                       className="mt-2 px-4 py-2 bg-coral text-white rounded-md text-sm"
                     >
-                      코멘트 추가
+                      댓글 작성
                     </button>
                   </div>
                 </div>

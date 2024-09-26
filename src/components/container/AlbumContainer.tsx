@@ -1,5 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import { useState } from "react";
+import spotifyLogo from "../../assets/spotify.png";
+import CommentModal from "../../components/CommentModal";
+import Favorites from "../../components/Favorites";
+import buttonReply from "../../assets/Reply.png";
+import { StarRating } from "../../components/StarRating";
 
 interface AlbumContainerProps {
   name: string;
@@ -9,95 +13,72 @@ interface AlbumContainerProps {
   genres: string;
 }
 
-const AlbumContainer: React.FC<AlbumContainerProps> = ({ name, artists, release_date, avg_rated }) => {
+const AlbumContainer: React.FC<AlbumContainerProps> = ({
+  name,
+  artists,
+  release_date,
+  avg_rated,
+}) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+  const [userRating, setUserRating] = useState<number>(0);
+  const handleRatingChange = (rating: number) => {
+    setUserRating(rating);
+    console.log(`User Rating: ${rating}`);
+  };
   return (
-    <Container>
-      <AlbumCover src="https://loremflickr.com/320/240?random=1" alt="앨범 커버" />
-      <SongDetails>
-        <AlbumTitle>{name}</AlbumTitle>
-        <ArtistName>{artists}</ArtistName>
-        <ReleasedDate>{release_date}</ReleasedDate>
-        <Rating>평균 별점: {avg_rated}</Rating>
-        {/* <Genre>{genres}</Genre> */}
-        <IconsContainer>
-          <Icon /> <Icon /> <Icon /> <Icon />
-        </IconsContainer>
-        <StarsContainer>
-          like, 코멘트 추가, 별점
-        </StarsContainer>
-      </SongDetails>
-    </Container>
+    <>
+      <section className="col-span-4">
+        {/* 1. 앨범 이미지 섹션 */}
+        <img
+          src="https://picsum.photos/300/300"
+          alt={name}
+          className="w-full h-auto rounded-md"
+        />
+      </section>
+      <section className="col-span-8">
+        {/* 2. 앨범 정보 및 상호작용 섹션 */}
+        <div className="flex flex-col justify-between h-full w-full">
+          <h1 className="ml-2 text-3xl font-bold">{name}</h1>
+          <h1 className="ml-2 text-2xl font-bold text-gray_dark">{artists}</h1>
+          <p className="ml-2 text-gray_dark text-xl">
+            ★ {avg_rated} / 5.0 | 🗎 ratingCount
+          </p>
+          <a href="https://www.spotify.com" target="_blank">
+            <img
+              src={spotifyLogo}
+              alt="스포티파이 로고"
+              className="ml-2 w-12 h-12 rounded-full"
+            />
+          </a>
+          <div className="flex space-x-4 items-center h-14">
+            {" "}
+            <Favorites />
+            <button onClick={handleOpenModal}>
+              <img
+                src={buttonReply}
+                alt="코멘트 작성"
+                className="w-16 h-16 object-contain"
+              />
+            </button>
+            <StarRating
+              initialRating={userRating}
+              onRate={handleRatingChange}
+            />
+          </div>
+        </div>
+      </section>
+      {/* 3. 코멘트 모달 */}
+      {isModalOpen && (
+        <CommentModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={(comment: string) => console.log(comment)}
+        />
+      )}
+    </>
   );
 };
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 310px 1fr;
-  gap: 20px;
-  align-items: center;
-  /* padding: 20px; */
-  /* border: 1px solid #ddd; */
-  border-radius: 10px;
-  background-color: #f9f9f9;
-`;
-
-const AlbumCover = styled.img`
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
-  /* background-color: #b27c7c; */
-`;
-
-const SongDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const AlbumTitle = styled.h2`
-  margin: 0;
-  font-size: 1.5rem;
-`;
-
-const ArtistName = styled.p`
-  margin: 0;
-  color: #666;
-  font-size: 1rem;
-`;
-
-const ReleasedDate = styled.p`
-  margin: 0;
-  color: #999;
-  font-size: 0.9rem;
-`;
-
-const Rating = styled.p`
-  margin: 0;
-  color: #999;
-  font-size: 0.9rem;
-`;
-
-// const Genre = styled.p`
-//   margin: 0;
-//   color: #666;
-//   font-size: 0.9rem;
-// `;
-
-const IconsContainer = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const Icon = styled.div`
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background-color: #7ed56f;
-`;
-
-const StarsContainer = styled.div`
-  display: flex;
-  gap: 5px;
-`;
 
 export default AlbumContainer;

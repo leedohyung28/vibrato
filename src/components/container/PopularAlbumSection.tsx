@@ -12,12 +12,18 @@ const PopularAlbumSection = () => {
   }, []);
   return (
     <aside className="col-span-4 p-4 bg-white">
-      <a href="chart" className="text-xl font-bold mb-4">
-        인기 앨범 ＞
+      <a
+        href="chart"
+        className="text-2xl font-bold mb-4 hover:underline hover:decoration-coral hover:decoration-4 hover:underline-offset-8"
+      >
+        인기 앨범
       </a>
 
       {albums.map((album) => (
-        <div key={album.id} className="shadow-xl p-4 rounded-md mb-4 my-4">
+        <div
+          key={album.id}
+          className="shadow-xl p-4 rounded-md mb-4 my-4 border border-gray_border"
+        >
           <div className="flex flex-grow items-center">
             <img
               src={album.album_image}

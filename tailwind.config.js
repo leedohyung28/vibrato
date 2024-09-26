@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         gray_light: "#F8F8F8",
         gray_dark: "#777777",
+        gray_border: "#EEEEEE",
         searchBar: "#EEEEEE",
         coral: "#C07777",
         white: "#FFFFFF",
