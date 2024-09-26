@@ -111,7 +111,7 @@ const ChartPage = () => {
   }
 
   return (
-    <div className="container mx-auto grid grid-cols-12 px-5 gap-10 bg-coral">
+    <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       <section className="col-span-8 p-4 bg-white overflow-hidden">
         <h2 className="text-2xl font-bold">{activeTab}</h2>
         <div className="flex">
