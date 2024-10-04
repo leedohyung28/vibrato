@@ -5,6 +5,7 @@ import { StarRating } from "../../components/StarRating"; // 별점 컴포넌트
 import Favorites from "../../components/Favorites";
 import buttonReply from "../../assets/Reply.png";
 import spotifyLogo from "../../assets/spotify.png";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface Artist {
   id: string;
@@ -104,8 +105,13 @@ const ArtistPage = () => {
     console.log(`User Rating: ${rating}`);
   };
 
-  if (!artist) return <div>로딩 중...</div>;
-
+  if (!artist) {
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       <section className="col-span-4">
@@ -113,7 +119,7 @@ const ArtistPage = () => {
         <img
           src={artist.image}
           alt={artist.name}
-          className="w-full h-auto rounded-md"
+          className="w-full h-auto rounded-md border drop-shadow-md"
         />
       </section>
       <section className="col-span-8">
@@ -127,7 +133,7 @@ const ArtistPage = () => {
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"
-              className="ml-2 w-12 h-12 rounded-full"
+              className="ml-2 w-12 h-12 rounded-full drop-shadow-md"
             />
           </a>
           <div className="flex space-x-4 items-center h-14">
@@ -137,7 +143,7 @@ const ArtistPage = () => {
               <img
                 src={buttonReply}
                 alt="코멘트 작성"
-                className="w-16 h-16 object-contain"
+                className="w-16 h-16 object-contain drop-shadow-md"
               />
             </button>
             <StarRating

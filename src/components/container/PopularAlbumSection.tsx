@@ -28,7 +28,7 @@ const PopularAlbumSection = () => {
             <img
               src={album.album_image}
               alt={album.album_name}
-              className="w-20 h-20 bg-coral rounded"
+              className="w-20 h-20 bg-coral rounded border drop-shadow-md"
             />
             <div className="ml-4 flex flex-col">
               <h4 className="font-bold text-lg">{album.album_name}</h4>

@@ -14,7 +14,7 @@ const Favorites: React.FC = () => {
       <img
         src={isLiked ? favorites : unfavorites}
         alt={isLiked ? "좋아요 취소" : "좋아요"}
-        className="object-cover w-16 h-16"
+        className="object-cover w-16 h-16 drop-shadow-md"
       />
     </button>
   );

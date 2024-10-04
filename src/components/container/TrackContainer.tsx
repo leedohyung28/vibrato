@@ -40,7 +40,7 @@ const TrackContainer = () => {
         <img
           src="https://picsum.photos/300/300"
           alt={mockTrack[0].album}
-          className="w-full h-auto rounded-md"
+          className="w-full h-auto rounded-md border drop-shadow-md"
         />
       </section>
       <section className="col-span-8">
@@ -60,7 +60,7 @@ const TrackContainer = () => {
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"
-              className="ml-2 w-12 h-12 rounded-full"
+              className="ml-2 w-12 h-12 rounded-full drop-shadow-md"
             />
           </a>
           <div className="flex space-x-4 items-center h-14">
@@ -70,7 +70,7 @@ const TrackContainer = () => {
               <img
                 src={buttonReply}
                 alt="코멘트 작성"
-                className="w-16 h-16 object-contain"
+                className="w-16 h-16 object-contain drop-shadow-md"
               />
             </button>
             <StarRating

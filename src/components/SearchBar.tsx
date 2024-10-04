@@ -1,10 +1,10 @@
-import search from "../assets/search.png";
+import searchIcon from "../assets/search.png";
 
 const SearchBar = () => {
   return (
     <div className="relative">
       <img
-        src={search}
+        src={searchIcon}
         alt="Search Icon"
         className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
       />

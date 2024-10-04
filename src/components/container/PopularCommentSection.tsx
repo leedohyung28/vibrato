@@ -102,7 +102,7 @@ const PopularCommentSection = () => {
             <div className="flex mb-4">
               <img
                 src="https://picsum.photos/200"
-                className="w-40 h-40 object-contain rounded flex-shrink-0"
+                className="w-40 h-40 object-contain rounded flex-shrink-0 border shadow-md"
                 alt="앨범 커버"
               />
               {/* 앨범 커버 */}
@@ -110,7 +110,7 @@ const PopularCommentSection = () => {
                 {renderStars(review.rated)} {/* 별점 */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-coral"></span>
+                    <span className="w-10 h-10 rounded-full bg-coral border shadow-md"></span>
                     {/* 작성자 프로필 이미지 */}
                     <h3 className="font-bold text-lg ml-2">
                       {review.user_uid}
@@ -137,7 +137,7 @@ const PopularCommentSection = () => {
                     <img
                       src={spotifyLogo}
                       alt="스포티파이 로고"
-                      className="w-8 h-8 rounded-full"
+                      className="w-8 h-8 rounded-full drop-shadow-md"
                     ></img>
                   </a>
                 </div>

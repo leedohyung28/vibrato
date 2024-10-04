@@ -9,6 +9,9 @@ import ArtistComment from "./routes/comment/ArtistComment";
 import ArtistCommentDetail from "./routes/comment/ArtistCommentDetail";
 import Track from "./routes/track/track";
 import PopularCommentDetail from "./routes/comment/PopularCommentDetail";
+import Mypage from "./routes/mypage/MyPage";
+import MyPageEdit from "./routes/mypage/MyPageEdit";
+
 function App() {
   return (
     <Router>
@@ -29,8 +32,9 @@ function App() {
             path="/PopularCommentDetail"
             element={<PopularCommentDetail />}
           />
-
+          <Route path="/MyPage" element={<Mypage />}></Route>
           <Route path="/Track" element={<Track />} />
+          <Route path="/MyPage/Edit" element={<MyPageEdit />} />
         </Routes>
       </div>
     </Router>

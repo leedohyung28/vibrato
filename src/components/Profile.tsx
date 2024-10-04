@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useAuthStore } from "../store/authStore";
+import { Link } from "react-router-dom";
 
 const Profile: React.FC = () => {
   const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout } =
@@ -139,25 +140,49 @@ const Profile: React.FC = () => {
   return (
     <div>
       {isLoggedIn ? (
-        <div className="flex items-center space-x-2 justify-end">
-          <img
-            src={profileImageUrl}
-            alt="Profile"
-            className="w-8 h-8 rounded-full bg-red-300"
-          />
-          <span className="text-gray_dark">{nickname}님</span>
-          <button onClick={handleLogout} className="text-gray_dark">
+        <div className="flex items-center justify-end space-x-2 w-full">
+          {/* 프로필 이미지 및 닉네임 */}
+          <Link
+            to="/MyPage"
+            className="flex items-center overflow-hidden group"
+          >
+            {/* 프로필 이미지 */}
+            <div className="flex-shrink-0">
+              <img
+                src={profileImageUrl}
+                alt="Profile"
+                className="w-8 h-8 rounded-full bg-coral border drop-shadow-md"
+              />
+            </div>
+
+            {/* 닉네임과 "님" */}
+            <div className="flex items-center space-x-1 flex-grow overflow-hidden ml-2">
+              <span className="truncate text-gray_dark group-hover:text-coral">
+                {nickname}
+              </span>
+              <span className="text-gray_dark group-hover:text-coral">님</span>
+            </div>
+          </Link>
+
+          {/* 로그아웃 버튼 */}
+          <button
+            onClick={handleLogout}
+            className="text-gray_dark hover:text-coral flex-shrink-0 ml-4"
+          >
             로그아웃
           </button>
         </div>
       ) : (
         <div className="flex space-x-4 justify-end">
-          <button onClick={() => openModal("login")} className="text-gray_dark">
+          <button
+            onClick={() => openModal("login")}
+            className="text-gray_dark hover:text-coral"
+          >
             로그인
           </button>
           <button
             onClick={() => openModal("signup")}
-            className="text-gray_dark"
+            className="text-gray_dark hover:text-coral"
           >
             회원가입
           </button>

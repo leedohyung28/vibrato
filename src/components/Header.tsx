@@ -13,10 +13,10 @@ const Header = () => {
         <div className="col-span-2">
           <Navigation />
         </div>
-        <div className="col-span-6 flex-grow">
+        <div className="col-span-5 flex-grow">
           <SearchBar />
         </div>
-        <div className="col-span-2 flex-grow">
+        <div className="col-span-3 flex-grow">
           <Profile />
         </div>
       </div>
