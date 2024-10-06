@@ -1,8 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
+import dotenv from "dotenv";
 
-export default defineConfig(({ mode }) => {
+dotenv.config();
+
+export default defineConfig(() => {
   return {
     plugins: [
       react(),
@@ -10,18 +13,18 @@ export default defineConfig(({ mode }) => {
         svgrOptions: {},
       }),
     ],
-    base: mode === "production" ? "/" : "/",
+    base: "",
     define: {
+      VITE_API_BASE_URL: JSON.stringify(process.env.VITE_API_BASE_URL || ""),
       VITE_SPOTIFY_CLIENT_ID: JSON.stringify(
-        "f02dbdc5d74f4b9aa10fcc00ae912943"
+        process.env.VITE_SPOTIFY_CLIENT_ID || ""
       ),
       VITE_SPOTIFY_CLIENT_SECRET: JSON.stringify(
-        "de85e1845047418ab6811a2eb034afc0"
+        process.env.VITE_SPOTIFY_CLIENT_SECRET || ""
       ),
       VITE_SPOTIFY_REDIRECT_URI: JSON.stringify(
-        "http://localhost:5173/callback"
+        process.env.VITE_SPOTIFY_REDIRECT_URI || ""
       ),
-      VITE_API_BASE_URL: JSON.stringify(process.env.VITE_API_BASE_URL || ""),
     },
   };
 });
