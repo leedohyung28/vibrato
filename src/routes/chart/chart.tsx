@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState, useCallback } from "react";
 import {
   fetchKoreaTop50,
   fetchGlobalTop50,
@@ -22,64 +23,69 @@ const ChartPage = () => {
   const itemsPerPage = 10;
   const maxPageDisplay = 10;
   const [pageStart, setPageStart] = useState<number>(1);
+  const [tabDataCache, setTabDataCache] = useState<{ [key: string]: Track[] }>(
+    {}
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const handleTabClick = useCallback(
+    async (tab: string) => {
+      if (tabDataCache[tab]) {
+        setChartData(tabDataCache[tab]);
+        setActiveTab(tab);
+        setCurrentPage(1);
+        setPageStart(1);
+        return;
+      }
+
+      setActiveTab(tab);
+      setCurrentPage(1);
+      setPageStart(1);
+
       try {
         setLoading(true);
+        setError("");
 
-        // 기본적으로 Top 50 한국 데이터를 로드
-        const data = await fetchKoreaTop50();
+        let data: Track[] = [];
+        switch (tab) {
+          case "Top 50 한국":
+            data = await fetchKoreaTop50();
+            break;
+          case "Top 50 글로벌":
+            data = await fetchGlobalTop50();
+            break;
+          case "주간 Top 50 한국":
+            data = await fetchKoreaWeeklyTop50();
+            break;
+          case "주간 Top 50 글로벌":
+            data = await fetchGlobalWeeklyTop50();
+            break;
+          case "최신 노래 한국":
+            data = await fetchKoreaRecentTracks();
+            break;
+          case "Anima R&B":
+            data = await fetchAnimaRnBChart();
+            break;
+          default:
+            throw new Error("유효하지 않은 탭입니다.");
+        }
+
+        setTabDataCache((prev) => ({
+          ...prev,
+          [tab]: data,
+        }));
         setChartData(data);
       } catch (err) {
-        setError("데이터를 가져오는 데 실패했습니다.");
+        setError(`${tab} 데이터를 가져오는 데 실패했습니다.`);
       } finally {
         setLoading(false);
       }
-    };
+    },
+    [tabDataCache]
+  );
 
-    fetchData();
-  }, []);
-
-  const handleTabClick = async (tab: string) => {
-    setActiveTab(tab);
-    setCurrentPage(1);
-    setPageStart(1);
-
-    try {
-      setLoading(true);
-      setError("");
-
-      switch (tab) {
-        case "Top 50 한국":
-          setChartData(await fetchKoreaTop50());
-          break;
-        case "Top 50 글로벌":
-          setChartData(await fetchGlobalTop50());
-          break;
-        case "주간 Top 50 한국":
-          setChartData(await fetchKoreaWeeklyTop50());
-          break;
-        case "주간 Top 50 글로벌":
-          setChartData(await fetchGlobalWeeklyTop50());
-          break;
-        case "최신 노래 한국":
-          setChartData(await fetchKoreaRecentTracks());
-          break;
-        case "Anima R&B":
-          setChartData(await fetchAnimaRnBChart());
-          break;
-        default:
-          setChartData([]);
-          setError("유효하지 않은 탭입니다.");
-          break;
-      }
-    } catch (err) {
-      setError(`${tab} 데이터를 가져오는 데 실패했습니다.`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    handleTabClick(activeTab);
+  }, [activeTab, handleTabClick]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -164,16 +170,20 @@ const ChartPage = () => {
                     <p className="text-sm text-gray_dark">
                       발매일: {item.release_date}
                     </p>
-                    <a href="https://www.spotify.com" target="_blank">
+                    <a
+                      href={item.album_spotify_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img
                         src={spotifyLogo}
                         alt="스포티파이 로고"
                         className="w-6 h-6 rounded-full"
-                      ></img>
+                      />
                     </a>
                   </div>
                   <p className="absolute bottom-2 right-2 text-sm text-gray_dark">
-                    ⭐︎ {item.rated} / 5.0 | 🗎 평가수
+                    ⭐︎ {item.rated} / 5.0 | 평가수
                   </p>
                   <h2 className="absolute top-4 right-4 text-2xl font-bold">
                     #{item.id}
