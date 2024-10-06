@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
         svgrOptions: {},
       }),
     ],
-    base: mode === "production" ? "/your-base-url/" : "/",
+    base: mode === "production" ? "/" : "/",
     define: {
       VITE_SPOTIFY_CLIENT_ID: JSON.stringify(
         "f02dbdc5d74f4b9aa10fcc00ae912943"
