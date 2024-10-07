@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { albumDetailMock } from "../mockData";
+import { getToken } from "../store/authStore";
 
 interface Album {
   name: string; // 앨범 이름
@@ -33,33 +34,55 @@ interface Artist {
   liked: boolean; // 선호 여부
 }
 
-const useAlbumDetail = (albumId: string) => {
+
+export const useAlbumDetail = (type_id: string) => {
   const [album, setAlbum] = useState<Album | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAlbum = async () => {
-      try {
-        const response = await fetch(`/api/album/${albumId}`);
+    const token = getToken();
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
+      try {
+        // const response = await fetch(`/search/single/album`, {
+        // method: "GET",
+        // headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: `Bearer ${token}`,
+        // },
+        // body: JSON.stringify({ type_id }),
+        // });
+
+        // if (!response.ok) {
+        //   throw new Error(`Error: ${response.status}`);
+        // }
 
         // const data: Album = await response.json();
         // setAlbum(data);
+
         // 일단 목데이터 사용
-        setAlbum(albumDetailMock);
-      } catch (err: any) {
-        setError(err.message);
+        setAlbum(albumDetailMock);        
+
+    //   } catch (err: unknown) {
+    //     setError(err.message);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+      } catch (err: unknown) {  // `unknown`으로 변경
+        if (err instanceof Error) {
+          setError(err.message);  // 타입 검사 후 `Error` 타입 처리
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchAlbum();
-  }, [albumId]);
+  }, [type_id]);
 
   return { album, loading, error };
 };
