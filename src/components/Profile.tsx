@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { getUserInfo, signup } from "../apis/login";
 import Modal from "./Modal";
-import styled from "styled-components";
 import { auth } from "../firebase"; // Firebase 초기화 파일
 import {
   createUserWithEmailAndPassword,
@@ -15,9 +14,6 @@ const Profile: React.FC = () => {
   const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout } =
     useAuthStore();
 
-  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  // const [nickname, setNickname] = useState<string>("");
-  // const [profileImageUrl, setProfileImageUrl] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<"login" | "signup" | "">("");
 
@@ -55,13 +51,13 @@ const Profile: React.FC = () => {
     e.preventDefault();
 
     try {
-      await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
-      await signup({
-        email: signupEmail,
-        password: signupPassword,
-        image_id: 1,
-        nickname: signupNickname,
-      });
+      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      const user = userCredential.user;
+      const idToken = await user.getIdToken()
+      console.log(idToken);
+
+      // await signup({ email: signupEmail, password: signupPassword, profileImageId: 1, nickname: signupNickname, idToken });
+      await signup({ profileImageId: 1, nickname: signupNickname, idToken });
       alert("회원가입 성공");
       closeModal(); // 모달 닫기
     } catch (error) {
@@ -69,9 +65,7 @@ const Profile: React.FC = () => {
       if (error instanceof FirebaseError) {
         alert("회원가입 실패: " + handleError(error));
       } else if (error == "Error: 회원가입 api 연동 필요") {
-        alert(
-          "회원가입 실패: Firebase에 유저 추가 완료, 하지만 회원가입 api 연동 필요"
-        );
+        alert("회원가입 실패: Firebase에 유저 추가 완료, 하지만 회원가입 api 연동 필요")
         closeModal(); // 모달 닫기
       } else {
         alert("회원가입 실패: 알 수 없는 오류가 발생했습니다." + error);
@@ -83,16 +77,15 @@ const Profile: React.FC = () => {
     e.preventDefault();
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      ); // 입력된 이메일과 비밀번호 사용
+      const userCredential = await signInWithEmailAndPassword(auth, email, password); // 입력된 이메일과 비밀번호 사용
       const user = userCredential.user;
-      const uid = user.uid;
+      // const uid = user.uid;
+      const idToken = await user.getIdToken()
+      console.log(idToken, "logined")
 
       // 헤더에 표시될 닉네임, 이미지 받아오기
-      const userInfo = await getUserInfo({ uid });
+      // const userInfo = await getUserInfo({ uid, token: idToken });
+      const userInfo = await getUserInfo({ token: idToken });
       // setNickname(userInfo.nickname);
       // setProfileImageUrl(userInfo.image_URL);
 
@@ -111,9 +104,7 @@ const Profile: React.FC = () => {
       if (error instanceof FirebaseError) {
         alert("회원 정보 조회 실패: " + handleError(error));
       } else if (error == "Error: 로그인 api 연동 필요") {
-        alert(
-          "로그인 실패: Firebase를 통한 로그인 완료, 하지만 로그인 api 연동 필요"
-        );
+        alert("로그인 실패: Firebase를 통한 로그인 완료, 하지만 로그인 api 연동 필요")
       } else {
         alert("로그인 실패: 알 수 없는 오류가 발생했습니다." + error);
       }
@@ -121,10 +112,7 @@ const Profile: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // setIsLoggedIn(false);
     storeLogout();
-    // setNickname("");
-    // setProfileImageUrl("");
   };
 
   const openModal = (type: "login" | "signup") => {
@@ -134,13 +122,21 @@ const Profile: React.FC = () => {
 
   const closeModal = () => {
     setShowModal(false);
+    if (modalType === "login") {
+      setEmail("");
+      setPassword("");
+    } else {
+      setSignupEmail("");
+      setSignupPassword("");
+      setSignupNickname("");
+    }
     setModalType("");
   };
 
   return (
     <div>
       {isLoggedIn ? (
-        <div className="flex items-center justify-end space-x-2 w-full">
+        <div className="flex items-center space-x-2 justify-end space-x-2 w-full">
           {/* 프로필 이미지 및 닉네임 */}
           <Link
             to="/MyPage"
@@ -163,7 +159,6 @@ const Profile: React.FC = () => {
               <span className="text-gray_dark group-hover:text-coral">님</span>
             </div>
           </Link>
-
           {/* 로그아웃 버튼 */}
           <button
             onClick={handleLogout}
@@ -190,155 +185,75 @@ const Profile: React.FC = () => {
       )}
 
       {showModal && (
-        <Modal
-          title={modalType === "login" ? "로그인" : "회원가입"}
-          onClose={closeModal}
-        >
-          {modalType === "login" ? (
-            <Form onSubmit={handleLogin}>
-              <Input
-                type="email"
-                placeholder="이메일"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <Input
-                type="password"
-                placeholder="비밀번호"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <SubmitButton type="submit">로그인</SubmitButton>
-            </Form>
-          ) : (
-            <Form onSubmit={handleSignup}>
-              <Input
-                type="email"
-                placeholder="이메일"
-                value={signupEmail}
-                onChange={(e) => setSignupEmail(e.target.value)}
-                required
-              />
-              <Input
-                type="password"
-                placeholder="비밀번호"
-                value={signupPassword}
-                onChange={(e) => setSignupPassword(e.target.value)}
-                required
-              />
-              <Input
-                type="text"
-                placeholder="닉네임"
-                value={signupNickname}
-                onChange={(e) => setSignupNickname(e.target.value)}
-                required
-              />
-              <SubmitButton type="submit">회원가입</SubmitButton>
-            </Form>
-          )}
-        </Modal>
+        <div className="fixed inset-0 z-50 flex justify-center items-center">
+          <Modal
+            title={modalType === "login" ? "로그인" : "회원가입"}
+            onClose={closeModal}
+          >
+            {modalType === "login" ? (
+              <form onSubmit={handleLogin} className="flex flex-col gap-2">
+                <input
+                  type="email"
+                  placeholder="이메일"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <input
+                  type="password"
+                  placeholder="비밀번호"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <button
+                  type="submit"
+                  className="p-2 bg-[#c07777] text-white rounded hover:bg-[#af6363]"
+                >
+                  로그인
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleSignup} className="flex flex-col gap-2">
+                <input
+                  type="email"
+                  placeholder="이메일"
+                  value={signupEmail}
+                  onChange={(e) => setSignupEmail(e.target.value)}
+                  required
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <input
+                  type="password"
+                  placeholder="비밀번호"
+                  value={signupPassword}
+                  onChange={(e) => setSignupPassword(e.target.value)}
+                  required
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <input
+                  type="text"
+                  placeholder="닉네임"
+                  value={signupNickname}
+                  onChange={(e) => setSignupNickname(e.target.value)}
+                  required
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <button
+                  type="submit"
+                  className="p-2 bg-[#c07777] text-white rounded hover:bg-[#af6363]"
+                >
+                  회원가입
+                </button>
+              </form>
+            )}
+          </Modal>
+        </div>
       )}
     </div>
   );
 };
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* 입력 필드와 버튼 간격 */
-`;
-
-const Input = styled.input`
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px;
-  background-color: #c07777;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #af6363;
-  }
-`;
-
 export default Profile;
-
-// import { useState } from "react";
-// import { getUserInfo, signup } from "../apis/login";
-
-// const Profile = () => {
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const [nickname, setNickname] = useState("");
-//   const [profileImageUrl, setProfileImageUrl] = useState("");
-
-//   const handleSignup = async () => {
-//     try {
-//       const email = "test@test.com";
-//       const password = "test";
-//       const nickname = "test";
-//       const imageId = 1;
-
-//       await signup({ email, password, image_id: imageId, nickname });
-//       alert("회원가입 성공");
-//     } catch (error) {
-//       console.error("회원가입:", error);
-//       alert("회원가입 실패");
-//     }
-//   };
-
-//   const handleLogin = async () => {
-//     try {
-//       setIsLoggedIn(true);
-
-//       const userInfo = await getUserInfo();
-//       setNickname(userInfo.nickname);
-//       setProfileImageUrl(userInfo.profile_image_URL);
-//     } catch (error) {
-//       console.error("로그인 중 오류 발생:", error);
-//       alert("회원 정보 조회 실패");
-//     }
-//   };
-
-//   const handleLogout = () => {
-//     setIsLoggedIn(false);
-//     setNickname("");
-//     setProfileImageUrl("");
-//   };
-
-//   return (
-//     <div>
-//       {isLoggedIn ? (
-//         <div className="flex items-center space-x-2">
-//           <img
-//             src={profileImageUrl}
-//             alt="Profile"
-//             className="w-8 h-8 rounded-full bg-red-300"
-//           />
-//           <span className="text-gray-600">{nickname}님</span>
-//           <button onClick={handleLogout} className="text-gray-600">
-//             로그아웃
-//           </button>
-//         </div>
-//       ) : (
-//         <div className="flex space-x-4">
-//           <button onClick={handleLogin} className="text-gray-600">
-//             로그인
-//           </button>
-//           <button onClick={handleSignup} className="text-gray-600">
-//             회원가입
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Profile;
