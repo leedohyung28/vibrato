@@ -11,6 +11,7 @@ module.exports = {
         gray_border: "#EEEEEE",
         searchBar: "#EEEEEE",
         coral: "#C07777",
+        light_coral: "#DAB6B6",
         white: "#FFFFFF",
         black: "#000000",
         yellow: "#FFAF01",

@@ -15,7 +15,7 @@ const MyPage = () => {
           <img
             src={profileImageUrl}
             alt="Profile"
-            className="w-40 h-40 rounded-full border shadow-md"
+            className="w-40 h-40 rounded-full bg-light_coral border shadow-md"
           />
           <span className="text-2xl font-bold">{nickname} 님</span>
         </div>
