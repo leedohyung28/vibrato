@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { useAuthStore } from "../../store/authStore";
+import { getToken, useAuthStore } from "../../store/authStore";
+import { updateProfile } from "../../apis/updateProfile";
 
 const MyPageEdit = () => {
   const { nickname, profileImageUrl, updateNickname, updateProfileImageUrl } =
     useAuthStore();
   const [newNickname, setNewNickname] = useState(nickname);
+
+  const idToken = getToken();
+  console.log(idToken);
 
   const handleNicknameChange = () => {
     if (newNickname.trim() === "") {
@@ -12,12 +16,23 @@ const MyPageEdit = () => {
       return;
     }
     updateNickname(newNickname);
-    alert("닉네임이 변경되었습니다.");
-  };
 
-  const handleProfileImageChange = (imageUrl: string) => {
-    updateProfileImageUrl(imageUrl);
-    alert("프로필 이미지가 변경되었습니다.");
+    // 회원정보 수정 API
+    if (idToken) {
+      updateProfile({ token: idToken, profileImageUrl: profileImageUrl, nickname: newNickname });
+      alert("닉네임이 변경되었습니다.");
+    } 
+    };
+
+  const handleProfileImageChange = (imageName: string) => {
+    const targetImageURL = `https://my-vibrato-bucket.s3.ap-northeast-2.amazonaws.com/vibrato/${imageName}`
+    updateProfileImageUrl(targetImageURL);
+
+    // 회원정보 수정 API 
+    if (idToken) {
+      updateProfile({ token: idToken, profileImageUrl: targetImageURL, nickname: nickname });
+      alert("프로필 이미지가 변경되었습니다.");
+    } 
   };
 
   return (
@@ -28,7 +43,7 @@ const MyPageEdit = () => {
           <img
             src={profileImageUrl}
             alt="Profile"
-            className="w-40 h-40 rounded-full border shadow-md"
+            className="w-40 h-40 rounded-full bg-light_coral border shadow-md"
           />
           <span className="text-2xl font-bold">{nickname} 님</span>
         </div>
@@ -60,21 +75,27 @@ const MyPageEdit = () => {
       <h2 className="col-span-12 font-semibold text-xl px-5 mr-20">
         프로필 이미지 변경
       </h2>
-      <div className="col-span-12 flex justify-between items-center px-10">
+      <div className="col-span-12 flex flex-wrap justify-center items-center gap-6 px-10">
         {[
-          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMXz1JQ_zgFVaefF3VlyoteuPH5V9GWhIc-fCFGtvCF8Z37bN73rMc7n7sPT0GAzRfX3OiykfY99r5aZRp-RglLB8CA684ComGns2YrfyS1iisQAQ_tJm6sLEBUSEKbn2d_g5lzM10yJc4/s759/music_headphone_side_man.png",
-          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTepTG-u_YTPn6nKJAccCNGADSE0muIu_8vDfc0i3G5kCGd8bneyKN0UqRUo7HHzsebjtWkOQf27BST6vfd_E7aQ2eq2CKdWJNy9XFY5qKuWpoxO72sF5I06PHqEN2l0Hfc6fdQ1zBGGXd/s759/music_headphone_side_woman.png",
-          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisV2d0ePnogpUzvG5W4Jwnc8z9ms4dcblcpo45xA637bMTQQqnKtA2VkBcgEGj_bajSEaaWQENeiJE00P_yq_RvJtryMReUJ6WBqgNiowAqaytZoSnvyeKo7fOz53kLbJKR3sHXfEW_-Vs/s800/kagenagara_ouuen_idle_woman.png",
-          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEho9vI9SC_cRAh4b_PcNKV2PKazuCPsvEi9a6Qg06Rcs_cwotHaSYJtV6UdyjbltgP3SrH6GWC7na1UxKUspbFgJb6Lg-Nt4PYMrpKggvxTDELPOxo1BzPKAc-PTZ9xJ5T14ZGhcZnpPVjb/s800/kagenagara_ouuen_idle_man.png",
-          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhGDEEaaw5UETHT3c4L_rmoUtATvdpwMgbqj43hA7svDozM-PQcLh5xkdzmrHqJE8PZ3NVSi9ZWve5FPCLWZ3MYegdj4_9FzvPikQBtndg0OAAJ8znKN73JFaVDCyq7I4AHO1J33aCCJllX/s800/live_music_ouen_woman.png",
-          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjNicBgBOwyjpxFkzdnEI2GfFMHb3VRe1CWZAPuxRAC2J__hjhk2jVYBpG3NNptTzndjPpxJERKCGeGX4boQgqTMpNfQ5sRpOrp3mnm98urdMNxLxoC6v5E9D5DXonymBApMJoCO63xC3lf/s800/live_music_ouen_man.png",
-        ].map((imageUrl, index) => (
+          'profileImage01.png',
+          'profileImage02.png',
+          'profileImage03.png',
+          'profileImage04.png',
+          'profileImage05.png',
+          'profileImage06.png',
+          'profileImage07.png',
+          'profileImage08.png',
+          'profileImage09.png',
+          'profileImage10.png',
+          'profileImage11.png',
+          'profileImage12.png',
+        ].map((imageName, index) => (
           <img
             key={index}
-            src={imageUrl}
+            src={`https://my-vibrato-bucket.s3.ap-northeast-2.amazonaws.com/vibrato/${imageName}`}
             alt={`Profile ${index + 1}`}
-            className="w-40 h-40 rounded-full border shadow-md cursor-pointer"
-            onClick={() => handleProfileImageChange(imageUrl)}
+            className="w-40 h-40 rounded-full border bg-light_coral shadow-md cursor-pointer"
+            onClick={() => handleProfileImageChange(imageName)}
           />
         ))}
       </div>

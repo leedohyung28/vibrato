@@ -11,7 +11,7 @@ import { useAuthStore } from "../store/authStore";
 import { Link } from "react-router-dom";
 
 const Profile: React.FC = () => {
-  const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout } =
+  const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout, updateNickname, updateProfileImageUrl } =
     useAuthStore();
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -56,17 +56,17 @@ const Profile: React.FC = () => {
       const idToken = await user.getIdToken()
       console.log(idToken);
 
-      // await signup({ email: signupEmail, password: signupPassword, profileImageId: 1, nickname: signupNickname, idToken });
-      await signup({ profileImage: "1", nickname: signupNickname, idToken });
-      alert("회원가입 성공");
-      closeModal(); // 모달 닫기
+      // 회원가입 : 기본 프로필 이미지 (profileImage01.png), 닉네임 전달
+      await signup({ profileImage: "https://my-vibrato-bucket.s3.ap-northeast-2.amazonaws.com/vibrato/profileImage01.png", nickname: signupNickname, idToken });
+      alert("회원가입이 완료되었습니다.");
+      closeModal();
     } catch (error) {
       console.error("회원가입:", error);
       if (error instanceof FirebaseError) {
         alert("회원가입 실패: " + handleError(error));
       } else if (error == "Error: 회원가입 api 연동 필요") {
         alert("회원가입 실패: Firebase에 유저 추가 완료, 하지만 회원가입 api 연동 필요")
-        closeModal(); // 모달 닫기
+        closeModal();
       } else {
         alert("회원가입 실패: 알 수 없는 오류가 발생했습니다." + error);
       }
@@ -77,29 +77,24 @@ const Profile: React.FC = () => {
     e.preventDefault();
 
     try {
+      // 로그인 : 프로필 이미지 (aws S3 주소), 닉네임 불러오기
       const userCredential = await signInWithEmailAndPassword(auth, email, password); // 입력된 이메일과 비밀번호 사용
       const user = userCredential.user;
       // const uid = user.uid;
       const idToken = await user.getIdToken()
       console.log(idToken, "logined")
 
-      // 헤더에 표시될 닉네임, 이미지 받아오기
+      // 헤더에 표시될 닉네임, 이미지 받아온 후 업데이트
       const userInfo = await getUserInfo({ idToken: idToken });
-      // setNickname(userInfo.nickname);
-      // setProfileImageUrl(userInfo.profileImage);
-
-      console.log(userInfo);
-
-      console.log("Nickname:", userInfo.nickname);
-      console.log("Image ID:", userInfo.profileImage);
+      updateNickname(userInfo.nickname);
+      updateProfileImageUrl(userInfo.profileImage);
 
       // 로컬 스토리지에 저장할 토큰 생성
       const token = await user.getIdToken();
       storeLogin(token, userInfo.nickname, userInfo.profileImage);
 
-      alert("로그인 성공");
-      // setIsLoggedIn(true);
-      closeModal(); // 모달 닫기
+      // alert("로그인 성공");
+      closeModal();
     } catch (error) {
       console.error("로그인 중 오류 발생:", error);
       if (error instanceof FirebaseError) {
@@ -148,7 +143,7 @@ const Profile: React.FC = () => {
               <img
                 src={profileImageUrl}
                 alt="Profile"
-                className="w-8 h-8 rounded-full bg-coral border drop-shadow-md"
+                className="w-8 h-8 rounded-full bg-light_coral border drop-shadow-md"
               />
             </div>
 
