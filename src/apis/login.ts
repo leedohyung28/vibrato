@@ -1,36 +1,26 @@
-// import { getToken } from "../store/authStore";
-
 export interface SignupRequest {
-  // email: string;
-  // password: string;
-  profileImageId: number;
+  profileImage: string;
   nickname: string;
   idToken: string;
 }
 
-interface UserId {
-  // uid: string;
-  token: string;
+interface Token {
+  idToken: string;
 }
 
 export const signup = async ({
-  // email,
-  // password,
-  profileImageId,
+  profileImage,
   nickname,
   idToken
 }: SignupRequest) => {
-  // const token = getToken();
 
   const response = await fetch("/auth/join", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: idToken ? idToken : "",
       Authorization: `Bearer ${idToken}`,
     },
-    // body: JSON.stringify({ email, password, profileImageId, nickname }),
-    body: JSON.stringify({ profileImageId, nickname }),
+    body: JSON.stringify({ profileImage, nickname }),
   });
 
   if (!response.ok) {
@@ -39,29 +29,25 @@ export const signup = async ({
   }
 
   if (response.ok) {
-    console.log("signup - email, pw, profileImageId, nickname 보내기 성공")
+    console.log("signup - profileImage, nickname 보내기 성공")
   }
+
+  console.log(response);
 
   return await response.json();
 };
 
 
 export const getUserInfo = async ({
-  token
-}: UserId) => {
-  // const token = getToken();
-  console.log(token);
+  idToken
+}: Token) => {
+  console.log(idToken);
 
   const response = await fetch("/auth/login", {
     method: "GET",
-    // headers: {
-    //   "Content-Type": "application/json",
-    //   Authorization: token ? token : "",
-    // },
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${idToken}`,
     },
-    // body: JSON.stringify({ uid }),
   });
 
 if (!response.ok) {
@@ -78,7 +64,7 @@ if (!response.ok) {
 }
 
 if (response.ok) {
-  console.log("getUserInfo - 닉네임, 이미지 불러오기 성공")
+  console.log("getUserInfo - profileImage, nickname 불러오기 성공")
   console.log(response)
 }
 

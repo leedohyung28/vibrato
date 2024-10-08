@@ -57,7 +57,7 @@ const Profile: React.FC = () => {
       console.log(idToken);
 
       // await signup({ email: signupEmail, password: signupPassword, profileImageId: 1, nickname: signupNickname, idToken });
-      await signup({ profileImageId: 1, nickname: signupNickname, idToken });
+      await signup({ profileImage: "1", nickname: signupNickname, idToken });
       alert("회원가입 성공");
       closeModal(); // 모달 닫기
     } catch (error) {
@@ -84,17 +84,18 @@ const Profile: React.FC = () => {
       console.log(idToken, "logined")
 
       // 헤더에 표시될 닉네임, 이미지 받아오기
-      // const userInfo = await getUserInfo({ uid, token: idToken });
-      const userInfo = await getUserInfo({ token: idToken });
+      const userInfo = await getUserInfo({ idToken: idToken });
       // setNickname(userInfo.nickname);
-      // setProfileImageUrl(userInfo.image_URL);
+      // setProfileImageUrl(userInfo.profileImage);
+
+      console.log(userInfo);
 
       console.log("Nickname:", userInfo.nickname);
-      console.log("Image ID:", userInfo.image_URL);
+      console.log("Image ID:", userInfo.profileImage);
 
       // 로컬 스토리지에 저장할 토큰 생성
       const token = await user.getIdToken();
-      storeLogin(token, userInfo.nickname, userInfo.image_URL);
+      storeLogin(token, userInfo.nickname, userInfo.profileImage);
 
       alert("로그인 성공");
       // setIsLoggedIn(true);
