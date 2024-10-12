@@ -39,9 +39,9 @@ const StarRating: React.FC<StarRatingProps> = ({ initialRating, onRate }) => {
   };
 
   return (
-    <div className="flex space-x-2 items-center">
+    <div className="flex gap-1 items-center">
       {[1, 2, 3, 4, 5].map((star) => (
-        <div key={star} className="relative w-16 drop-shadow-md">
+        <div key={star} className="relative w-16 drop-shadow-md ">
           {/* 반 별 클릭 영역 */}
           <button
             onClick={() => handleClick(star - 0.5)}

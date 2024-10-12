@@ -76,9 +76,9 @@ const TrackList: React.FC = () => {
                 <span className="text-sm font-bold text-gray_dark">
                   ★ {track.rating} / 5.0 | 🗎 {track.ratingCount}
                 </span>
-                <div className="mt-1 transform scale-50">
+                <span className="m-2 w-8 h-8">
                   <Favorites />
-                </div>
+                </span>
               </div>
             </div>
           ))}

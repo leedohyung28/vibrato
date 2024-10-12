@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode } from "react";
 import logo from "../assets/Logo.png";
 
 interface ModalProps {
@@ -9,58 +8,21 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
-    return (
-      <Overlay>
-        <ModalContainer>
-          <LogoImage src={logo} alt="Logo" />
-          <ModalTitle>{title}</ModalTitle>
-          <div>{children}</div>
-          <CloseButton onClick={onClose}>닫기</CloseButton>
-        </ModalContainer>
-      </Overlay>
-    );
-  };
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ModalContainer = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`;
-
-const ModalTitle = styled.h2`
-  margin: 0 0 20px;
-  text-align: center;
-`;
-
-const CloseButton = styled.button`
-  margin-top: 20px;
-  background: transparent;
-  border: none;
-  color: gray;
-  cursor: pointer;
-`;
-
-const LogoImage = styled.img`
-  width: 100px;
-  height: auto;
-  margin-bottom: 20px;
-`;
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-72 flex flex-col text-center items-center">
+        <img src={logo} alt="Logo" className="w-24 h-auto mb-5 mx-auto" />
+        <h2 className="text-lg font-semibold mb-5">{title}</h2>
+        <div>{children}</div>
+        <button
+          onClick={onClose}
+          className="mt-5 bg-transparent border-none text-gray-500 cursor-pointer"
+        >
+          닫기
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default Modal;

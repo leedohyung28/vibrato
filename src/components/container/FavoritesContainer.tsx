@@ -57,9 +57,9 @@ const FavoritesContainer = () => {
               <span className="text-sm font-bold text-gray_dark">
                 ★ {song.rating} / 5.0 | 🗎 {song.ratingCount}
               </span>
-              <div className="mt-1 transform scale-50">
+              <span className="m-2 w-8 h-8">
                 <Favorites />
-              </div>
+              </span>
             </div>
           </div>
         ));
@@ -81,9 +81,9 @@ const FavoritesContainer = () => {
               <span className="text-sm font-bold text-gray_dark">
                 ★ {artist.rating} / 5.0 | 🗎 {artist.ratingCount}
               </span>
-              <div className="mt-1 transform scale-50">
+              <span className="m-2 w-8 h-8">
                 <Favorites />
-              </div>
+              </span>
             </div>
           </div>
         ));
@@ -108,9 +108,9 @@ const FavoritesContainer = () => {
               <span className="text-sm font-bold text-gray_dark">
                 ★ {album.rating} / 5.0 | 🗎 {album.ratingCount}
               </span>
-              <div className="mt-1 transform scale-50">
+              <span className="m-2 w-8 h-8">
                 <Favorites />
-              </div>
+              </span>
             </div>
           </div>
         ));

@@ -53,8 +53,9 @@ const AlbumContainer: React.FC<AlbumContainerProps> = ({
             />
           </a>
           <div className="flex space-x-4 items-center h-14">
-            {" "}
-            <Favorites />
+            <span className="w-16 h-16">
+              <Favorites />
+            </span>
             <button onClick={handleOpenModal}>
               <img
                 src={buttonReply}
