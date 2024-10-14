@@ -1,30 +1,43 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import spotifyLogo from "../../assets/spotify.png";
 import CommentModal from "../../components/CommentModal";
 import Favorites from "../../components/Favorites";
 import buttonReply from "../../assets/Reply.png";
 import { StarRating } from "../../components/StarRating";
 
-interface TrackContainerProps {
+interface Track {
   name: string;
-  artists: string;
-  album: string;
-  runningTime: string;
+  image_url: string;
+  artist_names: string[];
   release_date: string;
-  avg_rated: number;
-  genres: string;
+  spotify_url: string;
+  track_number: number;
+  duration: number;
+  avg_rated?: number;
+  count_rated?: number;
+  liked?: boolean;
+  preview?: string;
+  album: {
+    id: number;
+    name: string;
+    spotify_url: string;
+    avg_rated?: number;
+    liked?: boolean;
+  };
+  artists: {
+    id: string;
+    name: string;
+    spotify_url: string;
+    liked?: boolean;
+  };
 }
-const mockTrack = [
-  {
-    name: "노래 1",
-    artist: "가수 1",
-    album: "앨범 1",
-    runningTime: "3:30",
-    release_date: "2024.09.26",
-    avg_rated: 5.0,
-  },
-];
-const TrackContainer = () => {
+
+interface TrackContainerProps {
+  trackData: Track;
+}
+
+const TrackContainer: React.FC<TrackContainerProps> = ({ trackData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -33,30 +46,40 @@ const TrackContainer = () => {
     setUserRating(rating);
     console.log(`User Rating: ${rating}`);
   };
+
   return (
     <>
       <section className="col-span-4">
         {/* 1. 앨범 이미지 섹션 */}
         <img
-          src="https://picsum.photos/300/300"
-          alt={mockTrack[0].album}
+          src={trackData.image_url}
+          alt="track cover"
           className="w-full h-auto rounded-md border drop-shadow-md"
         />
       </section>
       <section className="col-span-8">
         {/* 2. 앨범 정보 및 상호작용 섹션 */}
         <div className="flex flex-col justify-between h-full w-full">
-          <h1 className="ml-2 text-3xl font-bold">{mockTrack[0].name}</h1>
-          <h1 className="ml-2 text-2xl font-bold text-gray_dark">
-            {mockTrack[0].artist}
-          </h1>
-          <h1 className="ml-2 text-xl font-bold text-gray_dark">
-            {mockTrack[0].album}
-          </h1>
+          <h1 className="ml-2 text-3xl font-bold">{trackData.name}</h1>
+          {trackData.artists.map((artist, index) => (
+            <Link key={artist.id} to={`/artist/${artist.id}`}>
+              <h1 className="ml-2 text-2xl font-bold text-gray_dark">
+                {artist.name}
+              </h1>
+              {index < trackData.artists.length - 1 && ", "}
+            </Link>
+          ))}
+          <Link to={`/album/${trackData.album.id}`}>
+            {" "}
+            <h1 className="ml-2 text-xl font-bold text-gray_dark">
+              {trackData.album.name}
+            </h1>
+          </Link>
+
           <p className="ml-2 text-gray_dark text-xl">
-            ★ {mockTrack[0].avg_rated} / 5.0 | 🗎 ratingCount
+            ★ {trackData.avg_rated} / 5.0 | 🗎 {trackData.count_rated}
           </p>
-          <a href="https://www.spotify.com" target="_blank">
+          <a href={trackData.spotify_url} target="_blank">
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"

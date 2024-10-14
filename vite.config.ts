@@ -13,6 +13,16 @@ export default defineConfig(() => {
         svgrOptions: {},
       }),
     ],
+    server: {
+      proxy: {
+        "/auth": { target: "http://localhost:8080", changeOrigin: true },
+        "/search": {
+          target: "http://localhost:8080", // 백엔드 서버 주소
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/search/, "/search"),
+        },
+      },
+    },
     base: "",
     define: {
       VITE_API_BASE_URL: JSON.stringify(process.env.VITE_API_BASE_URL || ""),

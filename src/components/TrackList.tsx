@@ -1,80 +1,65 @@
 import Favorites from "../components/Favorites";
+import { Link } from "react-router-dom";
 
-// Sample data for the tracks
-const tracks = [
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 1,
-    title: "노래 제목",
-    trackNumber: "트랙 1",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 2,
-    title: "노래 제목",
-    trackNumber: "트랙 2",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 3,
-    title: "노래 제목",
-    trackNumber: "트랙 3",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 4,
-    title: "노래 제목",
-    trackNumber: "트랙 4",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 5,
-    title: "노래 제목",
-    trackNumber: "트랙 5",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-];
+interface Album {
+  name: string;
+  image_url: string;
+  artist_names: string[];
+  genres?: string[];
+  release_date: string;
+  total_tracks: number[];
+  spotify_url: string;
+  avg_rated?: number;
+  count_rated?: number;
+  liked?: boolean;
+  tracks: {
+    id: string;
+    name: string;
+    spotify_url: string;
+    track_number: number;
+    liked?: boolean;
+  }[];
+  artist: {
+    id: string;
+    name: string;
+    spotify_url: string;
+    liked: boolean;
+  };
+}
 
-// Track component
-const TrackList: React.FC = () => {
+interface TrackListProps {
+  albumData: Album;
+}
+
+const TrackList: React.FC<TrackListProps> = ({ albumData }) => {
   return (
     <section className="col-span-8">
       <div className="col-span-1">
         <h2 className="text-2xl font-bold">트랙</h2>
         <div className="mt-4 rounded-md border border-gray_border shadow-md">
-          {tracks.map((track, index) => (
+          {albumData.tracks.map((track) => (
             <div
-              key={index}
+              key={track.id}
               className="flex justify-between border-b items-center"
             >
               <div className="flex flex-row items-center space-x-2">
+                {/* 앨범 이미지가 없으므로 앨범 전체 이미지를 사용하거나 기본값 설정 */}
                 <img
-                  src={track.cover}
+                  src={albumData.image_url}
                   alt="album Cover"
                   className="p-2 w-20 h-20 rounded"
                 />
-                <p className="text-lg font-bold">{track.title}</p>
+                <Link to={`/track/${track.id}`}>
+                  <p className="text-lg font-bold">{track.name}</p>
+                </Link>
+
                 <p className="text-sm font-semibold text-gray_dark">
-                  {track.runningTime}
+                  트랙 {track.track_number}
                 </p>
               </div>
               <div className="flex items-center">
                 <span className="text-sm font-bold text-gray_dark">
-                  ★ {track.rating} / 5.0 | 🗎 {track.ratingCount}
+                  ★ {albumData.avg_rated} / 5.0 | 🗎 {albumData.count_rated}
                 </span>
                 <span className="m-2 w-8 h-8">
                   <Favorites />

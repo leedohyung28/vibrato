@@ -1,27 +1,27 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import AlbumContainer from "../../components/container/AlbumContainer";
 import CommentSection from "../../components/CommentSection";
 import TrackList from "../../components/TrackList";
-import useAlbumDetail from "../../apis/album";
+import { useGetAlbum } from "../../apis/getAlbum";
 
 const Album: React.FC = () => {
-  const { album, loading, error } = useAlbumDetail("1");
+  const { query } = useParams<{ query: string }>();
+  const { album, loading, error } = useGetAlbum(query || "");
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!album) return <div>No data available</div>;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
-      <AlbumContainer
-        name={album.name}
-        artists={album.artists_names.join(", ")}
-        release_date={album.release_date}
-        avg_rated={album.avg_rated}
-        genres={album.genres.join(", ")}
-      />
+      {album && <AlbumContainer albumData={album} />}
       <CommentSection />
-      <TrackList />
+      <TrackList albumData={album} />
     </div>
   );
 };

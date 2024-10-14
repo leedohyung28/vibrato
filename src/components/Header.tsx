@@ -6,12 +6,12 @@ import Profile from "./Profile";
 const Header = () => {
   return (
     <header>
-      <div className="container mx-auto grid grid-cols-12 h-16 px-5 gap-10 font-semibold items-center">
-        <div className="col-span-2">
+      <div className="container mx-auto grid grid-cols-12 h-16 px-5 gap-10 font-semibold items-center border-b drop-shadow-md">
+        <div className="col-span-4 flex items-center gap-8">
           <Logo />
-        </div>
-        <div className="col-span-2">
-          <Navigation />
+          <span className="mr-auto">
+            <Navigation />
+          </span>
         </div>
         <div className="col-span-5 flex-grow">
           <SearchBar />
@@ -20,7 +20,6 @@ const Header = () => {
           <Profile />
         </div>
       </div>
-      <hr className="drop-shadow-md" />
     </header>
   );
 };
