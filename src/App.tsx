@@ -33,7 +33,7 @@ function App() {
             element={<PopularCommentDetail />}
           />
           <Route path="/MyPage" element={<Mypage />}></Route>
-          <Route path="/Track" element={<Track />} />
+          <Route path="/track/:trackId" element={<Track />} />
           <Route path="/MyPage/Edit" element={<MyPageEdit />} />
         </Routes>
       </div>

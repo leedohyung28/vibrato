@@ -7,16 +7,20 @@ import { StarRating } from "../StarRating";
 
 interface AlbumContainerProps {
   name: string;
+  image_url: string;
   artists: string;
   release_date: string;
+  spotify_url: string;
   avg_rated: number;
   genres: string;
 }
 
 const AlbumContainer: React.FC<AlbumContainerProps> = ({
   name,
+  image_url,
   artists,
   release_date,
+  spotify_url,
   avg_rated,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,12 +31,21 @@ const AlbumContainer: React.FC<AlbumContainerProps> = ({
     setUserRating(rating);
     console.log(`User Rating: ${rating}`);
   };
+
   return (
     <>
       <section className="col-span-4">
+        {/* 코멘트 모달 */}
+        {isModalOpen && (
+          <CommentModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSubmit={(comment: string) => console.log(comment)}
+          />
+        )}
         {/* 1. 앨범 이미지 섹션 */}
         <img
-          src="https://picsum.photos/300/300"
+          src={image_url}
           alt={name}
           className="w-full h-auto rounded-md border drop-shadow-md"
         />
@@ -43,9 +56,12 @@ const AlbumContainer: React.FC<AlbumContainerProps> = ({
           <h1 className="ml-2 text-3xl font-bold">{name}</h1>
           <h1 className="ml-2 text-2xl font-bold text-gray_dark">{artists}</h1>
           <p className="ml-2 text-gray_dark text-xl">
+            {release_date}
+          </p>
+          <p className="ml-2 text-gray_dark text-xl">
             ★ {avg_rated} / 5.0 | 🗎 ratingCount
           </p>
-          <a href="https://www.spotify.com" target="_blank">
+          <a href={spotify_url} target="_blank">
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"
@@ -70,14 +86,6 @@ const AlbumContainer: React.FC<AlbumContainerProps> = ({
           </div>
         </div>
       </section>
-      {/* 3. 코멘트 모달 */}
-      {isModalOpen && (
-        <CommentModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={(comment: string) => console.log(comment)}
-        />
-      )}
     </>
   );
 };

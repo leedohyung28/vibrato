@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useAuthStore } from "../store/authStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile: React.FC = () => {
   const { isLoggedIn, nickname, profileImageUrl, storeLogin, storeLogout, updateNickname, updateProfileImageUrl } =
@@ -23,6 +23,8 @@ const Profile: React.FC = () => {
   const [signupEmail, setSignupEmail] = useState<string>("");
   const [signupPassword, setSignupPassword] = useState<string>("");
   const [signupNickname, setSignupNickname] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const handleError = (error: FirebaseError) => {
     switch (error.code) {
@@ -109,6 +111,7 @@ const Profile: React.FC = () => {
 
   const handleLogout = () => {
     storeLogout();
+    navigate(`/`);
   };
 
   const openModal = (type: "login" | "signup") => {

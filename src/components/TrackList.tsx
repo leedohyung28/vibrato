@@ -1,56 +1,25 @@
+import { useNavigate } from "react-router-dom";
 import Favorites from "../components/Favorites";
 
-// Sample data for the tracks
-const tracks = [
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 1,
-    title: "노래 제목",
-    trackNumber: "트랙 1",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 2,
-    title: "노래 제목",
-    trackNumber: "트랙 2",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 3,
-    title: "노래 제목",
-    trackNumber: "트랙 3",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 4,
-    title: "노래 제목",
-    trackNumber: "트랙 4",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-  {
-    cover: "https://picsum.photos/300/300",
-    id: 5,
-    title: "노래 제목",
-    trackNumber: "트랙 5",
-    runningTime: "3:30",
-    rating: 5.0,
-    ratingCount: 10,
-  },
-];
+interface TrackProps {
+  tracks: {
+    id: string;
+    name: string;
+    spotify_url: string;
+    track_number: number;
+    liked: boolean;
+  }[];
+  album_image_url: string;
+}
 
-// Track component
-const TrackList: React.FC = () => {
+const TrackList: React.FC<TrackProps> = ({ tracks, album_image_url }) => {
+
+  const navigate = useNavigate();
+
+  const handleClick = (track_id: string) => {
+    navigate(`/track/${track_id}`);
+  };  
+
   return (
     <section className="col-span-8">
       <div className="col-span-1">
@@ -59,17 +28,18 @@ const TrackList: React.FC = () => {
           {tracks.map((track, index) => (
             <div
               key={index}
-              className="flex justify-between border-b items-center"
+              onClick={() => handleClick(track.id)} 
+              className="flex justify-between border-b items-center cursor-pointer hover:bg-gray-200"
             >
               <div className="flex flex-row items-center space-x-2">
                 <img
-                  src={track.cover}
+                  src={album_image_url}
                   alt="album Cover"
                   className="p-2 w-20 h-20 rounded"
                 />
-                <p className="text-lg font-bold">{track.title}</p>
+                <p className="text-lg font-bold">{track.name}</p>
                 <p className="text-sm font-semibold text-gray_dark">
-                  {track.runningTime}
+                  duration
                 </p>
               </div>
               <div className="flex items-center">
