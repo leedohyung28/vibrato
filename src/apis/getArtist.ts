@@ -22,9 +22,7 @@ export const useGetArtist = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.get(`/search/single/artist_query`, {
-          params: { type_id: query },
-        });
+        const response = await axios.put(`/search/single/artist/${query}`);
 
         console.log("API Response:", response.data);
 

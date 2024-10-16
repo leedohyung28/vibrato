@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useSearchAll } from "../../apis/searchAll";
 import Favorites from "../../components/Favorites";
@@ -10,9 +10,6 @@ const SearchResults: React.FC = () => {
   const query = searchParams.get("query");
 
   const { artists, albums, tracks } = useSearchAll(query || "");
-  useEffect(() => {
-    console.log("Artist:", tracks);
-  }, [tracks]);
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       <div className="col-span-12">

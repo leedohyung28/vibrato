@@ -69,9 +69,7 @@ export const useSearchAll = (searchContent: string) => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const response = await axios.get(`/search/all_query?`, {
-          params: { search_content: searchContent }, // search_content 쿼리 파라미터로 전달
-        });
+        const response = await axios.put(`/search/all/${searchContent}`);
 
         const { artists, albums, tracks } = response.data;
 

@@ -39,9 +39,7 @@ export const useGetTrack = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.get(`/search/single/track_query`, {
-          params: { type_id: query },
-        });
+        const response = await axios.put(`/search/single/track/${query}`);
 
         console.log("API Response:", response.data);
 

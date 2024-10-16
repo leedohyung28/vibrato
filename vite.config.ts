@@ -17,9 +17,8 @@ export default defineConfig(() => {
       proxy: {
         "/auth": { target: "http://localhost:8080", changeOrigin: true },
         "/search": {
-          target: "http://localhost:8080", // 백엔드 서버 주소
+          target: "http://localhost:8080",
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/search/, "/search"),
         },
       },
     },
