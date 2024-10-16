@@ -16,12 +16,23 @@ export default defineConfig(() => {
     server: {
       proxy: {
         "/auth": {
-          // target: 'http://13.125.186.69:3000',
           target: "http://localhost:8080",
           changeOrigin: true,
         },
         "/search": {
           target: "http://localhost:8080",
+          changeOrigin: true,
+        },
+        '/follows': {
+          target: 'http://localhost:8080',
+          changeOrigin: true,
+        },
+        '/reviews': {
+          target: 'http://localhost:8080',
+          changeOrigin: true,
+        },
+        '/review': {
+          target: 'http://localhost:8080',
           changeOrigin: true,
         },
       },

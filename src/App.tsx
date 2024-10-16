@@ -6,13 +6,13 @@ import Chart from "./routes/chart/chart";
 import NewMusicPage from "./routes/chart/newmusic";
 import Artist from "./routes/artist/artist";
 import Album from "./routes/album/album";
-import ArtistComment from "./routes/comment/ArtistComment";
-import ArtistCommentDetail from "./routes/comment/ArtistCommentDetail";
 import Track from "./routes/track/track";
 import PopularCommentDetail from "./routes/comment/PopularCommentDetail";
 import Mypage from "./routes/mypage/MyPage";
 import MyPageEdit from "./routes/mypage/MyPageEdit";
 import SearchResults from "./routes/search/SearchResults";
+import Reviews from "./routes/review/reviews";
+import Comments from "./routes/comment/comments";
 
 function App() {
   return (
@@ -27,11 +27,10 @@ function App() {
           <Route path="/Artist/:query" element={<Artist />} />
           <Route path="/Album/:query" element={<Album />} />
           <Route path="/Track/:query" element={<Track />} />
-          <Route path="/ArtistComment" element={<ArtistComment />} />
-          <Route
-            path="/ArtistCommentDetail"
-            element={<ArtistCommentDetail />}
-          />
+
+          <Route path="/Review/:typeID" element={<Reviews />} />
+          <Route path="/Review/:reviewID/Comments" element={<Comments />} />
+
           <Route
             path="/PopularCommentDetail"
             element={<PopularCommentDetail />}

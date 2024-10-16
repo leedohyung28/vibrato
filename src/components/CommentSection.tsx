@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const CommentSection: React.FC = () => {
+interface TypeId {
+  typeID : string
+}
+
+const CommentSection: React.FC<TypeId> = ({ typeID }) => {
   // 하드 코딩된 데이터
   const comments = [
     {
@@ -38,13 +43,18 @@ const CommentSection: React.FC = () => {
     },
   ];
 
+  const navigate = useNavigate();
+  const handleMoreClick = (typeID: string) => {
+    navigate(`/Review/${typeID}`);
+  };
+
   return (
     <section className="col-span-4">
       {/* 3. 코멘트 섹션 */}
       <div className="flex flex-col justify-between">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">코멘트</h2>
-          <button className="text-gray_dark hover:text-coral">더보기</button>
+          <button className="text-gray_dark hover:text-coral" onClick={() => handleMoreClick(typeID)}>더보기</button>
         </div>
         {/* 코멘트 내용 */}
         {comments.map((replies) => (

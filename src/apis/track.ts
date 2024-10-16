@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getTrackInfo = async (trackId: string) => {
   try {
-    const response = await axios.get(`/search/single/track/${trackId}`);
+    const response = await axios.put(`/search/single/track/${trackId}`);
     return response.data;
 
   } catch (error) {

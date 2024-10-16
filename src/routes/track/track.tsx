@@ -25,7 +25,7 @@ const Track: React.FC = () => {
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       {track && <TrackContainer trackData={track} />}
-      <CommentSection />
+      <CommentSection typeID={query}/>
     </div>
   );
 };

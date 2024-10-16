@@ -29,7 +29,7 @@ const Artist: React.FC = () => {
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       {artist && <ArtistContainer artistData={artist} />}
-      <CommentSection />
+      <CommentSection typeID={query}/>
     </div>
   );
 };
