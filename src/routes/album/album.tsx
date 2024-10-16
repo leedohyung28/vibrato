@@ -4,17 +4,23 @@ import AlbumContainer from "../../components/container/AlbumContainer";
 import CommentSection from "../../components/CommentSection";
 import TrackList from "../../components/TrackList";
 import { useGetAlbum } from "../../apis/getAlbum";
+import ErrorMessage from "../../components/ErrorMessage";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Album: React.FC = () => {
   const { query } = useParams<{ query: string }>();
   const { album, loading, error } = useGetAlbum(query || "");
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <ErrorMessage message={error} />;
   }
 
   return (

@@ -47,7 +47,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // 새로운 플레이리스트 API 추가
 export const fetchJazzForSleepChart = async (
-  limit: number = 20
+  limit: number = 100
 ): Promise<Track[]> => {
   try {
     const response = await axios.put(
@@ -65,7 +65,7 @@ export const fetchJazzForSleepChart = async (
 };
 
 export const fetchKPopDanceChart = async (
-  limit: number = 20
+  limit: number = 100
 ): Promise<Track[]> => {
   try {
     const response = await axios.put(
@@ -83,7 +83,7 @@ export const fetchKPopDanceChart = async (
 };
 
 export const fetchAllTimeHighestChart = async (
-  limit: number = 20
+  limit: number = 30
 ): Promise<Track[]> => {
   try {
     const response = await axios.put(
@@ -186,7 +186,7 @@ export const fetchGlobalWeeklyTop50 = async (
 
 // 최신 노래 조회 (국내)
 export const fetchKoreaRecentTracks = async (
-  limit: number = 20
+  limit: number = 100
 ): Promise<Track[]> => {
   try {
     const response = await axios.put(`${API_BASE_URL}/charts/korea/recent`, {
@@ -202,7 +202,7 @@ export const fetchKoreaRecentTracks = async (
 
 // Anima R&B 장르 차트 조회
 export const fetchAnimaRnBChart = async (
-  limit: number = 50
+  limit: number = 30
 ): Promise<Track[]> => {
   try {
     const response = await axios.put(`${API_BASE_URL}/charts/genres/animarnb`, {

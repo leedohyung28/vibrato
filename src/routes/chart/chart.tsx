@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom"; // useNavigate import
 import {
   fetchKoreaTop50,
   fetchGlobalTop50,
   fetchKoreaWeeklyTop50,
   fetchGlobalWeeklyTop50,
-  fetchKoreaRecentTracks,
   fetchAnimaRnBChart,
-  Track,
   // 추가된 플레이리스트 가져오기 함수들
   fetchJazzForSleepChart,
   fetchKPopDanceChart,
   fetchAllTimeHighestChart,
   fetchTodaysHitChart,
+  Track,
 } from "../../apis/chat";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -22,7 +22,7 @@ const ChartPage = () => {
   const [chartData, setChartData] = useState<Track[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>("Top 50 한국");
+  const [activeTab, setActiveTab] = useState<string>("Top 50 글로벌");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
   const maxPageDisplay = 10;
@@ -30,6 +30,8 @@ const ChartPage = () => {
   const [tabDataCache, setTabDataCache] = useState<{ [key: string]: Track[] }>(
     {}
   );
+
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   // 탭 클릭시 데이터 요청 및 캐싱 처리
   const handleTabClick = useCallback(
@@ -52,20 +54,17 @@ const ChartPage = () => {
 
         let data: Track[] = [];
         switch (tab) {
-          case "Top 50 한국":
-            data = await fetchKoreaTop50();
-            break;
           case "Top 50 글로벌":
             data = await fetchGlobalTop50();
             break;
-          case "주간 Top 50 한국":
-            data = await fetchKoreaWeeklyTop50();
+          case "Top 50 한국":
+            data = await fetchKoreaTop50();
             break;
           case "주간 Top 50 글로벌":
             data = await fetchGlobalWeeklyTop50();
             break;
-          case "최신 노래 한국":
-            data = await fetchKoreaRecentTracks();
+          case "주간 Top 50 한국":
+            data = await fetchKoreaWeeklyTop50();
             break;
           case "Anima R&B":
             data = await fetchAnimaRnBChart();
@@ -149,10 +148,16 @@ const ChartPage = () => {
                   <img
                     src={item.image_url}
                     alt={item.album_name}
-                    className="w-32 h-32 mr-4"
+                    className="w-32 h-32 mr-4 cursor-pointer"
+                    onClick={() => navigate(`/track/${item.id}`)} // 이미지 클릭 시 이동
                   />
                   <div className="flex flex-col h-32 w-full justify-between">
-                    <h3 className="text-xl font-semibold">{item.name}</h3>
+                    <h3
+                      className="text-xl font-semibold cursor-pointer"
+                      onClick={() => navigate(`/track/${item.id}`)} // 제목 클릭 시 이동
+                    >
+                      {item.name}
+                    </h3>
                     <div>
                       {item.album_artists.map((artist) => (
                         <span
@@ -230,7 +235,6 @@ const ChartPage = () => {
             "Top 50 글로벌",
             "주간 Top 50 한국",
             "주간 Top 50 글로벌",
-            "최신 노래 한국",
             "Anima R&B",
             "Jazz for Sleep",
             "K Pop Dance",

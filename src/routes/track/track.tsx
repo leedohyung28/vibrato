@@ -3,17 +3,23 @@ import { useParams } from "react-router-dom";
 import TrackContainer from "../../components/container/TrackContainer";
 import CommentSection from "../../components/CommentSection";
 import { useGetTrack } from "../../apis/getTrack";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const Track: React.FC = () => {
   const { query } = useParams<{ query: string }>();
   const { track, loading, error } = useGetTrack(query || "");
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <ErrorMessage message={error} />;
   }
 
   return (

@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import CommentSection from "../../components/CommentSection";
 import { useGetArtist } from "../../apis/getArtist";
 import ArtistContainer from "../../components/container/ArtistContainer";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const Artist: React.FC = () => {
   const { query } = useParams<{ query: string }>();
@@ -13,11 +15,15 @@ const Artist: React.FC = () => {
   }, [artist]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <ErrorMessage message={error} />;
   }
 
   return (
