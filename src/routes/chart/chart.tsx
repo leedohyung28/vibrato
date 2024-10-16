@@ -8,6 +8,11 @@ import {
   fetchKoreaRecentTracks,
   fetchAnimaRnBChart,
   Track,
+  // 추가된 플레이리스트 가져오기 함수들
+  fetchJazzForSleepChart,
+  fetchKPopDanceChart,
+  fetchAllTimeHighestChart,
+  fetchTodaysHitChart,
 } from "../../apis/chat";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -19,7 +24,6 @@ const ChartPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("Top 50 한국");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [contentType, setContentType] = useState<string>("앨범");
   const itemsPerPage = 10;
   const maxPageDisplay = 10;
   const [pageStart, setPageStart] = useState<number>(1);
@@ -27,6 +31,7 @@ const ChartPage = () => {
     {}
   );
 
+  // 탭 클릭시 데이터 요청 및 캐싱 처리
   const handleTabClick = useCallback(
     async (tab: string) => {
       if (tabDataCache[tab]) {
@@ -64,6 +69,19 @@ const ChartPage = () => {
             break;
           case "Anima R&B":
             data = await fetchAnimaRnBChart();
+            break;
+          // 추가된 플레이리스트 처리
+          case "Jazz for Sleep":
+            data = await fetchJazzForSleepChart();
+            break;
+          case "K Pop Dance":
+            data = await fetchKPopDanceChart();
+            break;
+          case "All-Time Highest Rated Songs":
+            data = await fetchAllTimeHighestChart();
+            break;
+          case "Today’s Hit":
+            data = await fetchTodaysHitChart();
             break;
           default:
             throw new Error("유효하지 않은 탭입니다.");
@@ -122,23 +140,6 @@ const ChartPage = () => {
         <h2 className="text-2xl font-bold">{activeTab}</h2>
         <div className="flex">
           <div className="flex-1 my-4">
-            <div className="flex space-x-4 mb-4">
-              {/* 앨범 / 노래 선택 */}
-              {["앨범", "노래"].map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setContentType(type)}
-                  className={`text-xl font-semibold ${
-                    contentType === type
-                      ? "font-bold underline decoration-coral decoration-4 underline-offset-8"
-                      : ""
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-            {/* 데이터가 배열인지 확인 */}
             {Array.isArray(paginatedData) && paginatedData.length > 0 ? (
               paginatedData.map((item) => (
                 <div
@@ -146,7 +147,7 @@ const ChartPage = () => {
                   className="relative flex mb-4 p-4 border border-gray_border shadow-md rounded-md"
                 >
                   <img
-                    src={item.album_image}
+                    src={item.image_url}
                     alt={item.album_name}
                     className="w-32 h-32 mr-4"
                   />
@@ -162,11 +163,6 @@ const ChartPage = () => {
                         </span>
                       ))}
                     </div>
-                    {contentType === "노래" && (
-                      <h2 className="text-sm text-gray_dark">
-                        {item.album_name}
-                      </h2>
-                    )}
                     <p className="text-sm text-gray_dark">
                       발매일: {item.release_date}
                     </p>
@@ -183,21 +179,16 @@ const ChartPage = () => {
                     </a>
                   </div>
                   <p className="absolute bottom-2 right-2 text-sm text-gray_dark">
-                    ⭐︎ {item.rated} / 5.0 | 평가수
+                    ⭐︎ {item.avg_rated} / 5.0 | 평가수 {item.count_rated}
                   </p>
-                  <h2 className="absolute top-4 right-4 text-2xl font-bold">
-                    #{item.id}
-                  </h2>
                 </div>
               ))
             ) : (
               <div className="text-gray_dark">데이터가 없습니다.</div>
             )}
 
-            {/* Pagination */}
             {chartData.length > 0 && (
               <div className="flex justify-center space-x-2 mt-4">
-                {/* 이전 페이지 세트로 이동 */}
                 {pageStart > 1 && (
                   <button onClick={handlePrevPageSet} className="px-3 py-1">
                     ←
@@ -221,7 +212,6 @@ const ChartPage = () => {
                   </button>
                 ))}
 
-                {/* 다음 페이지 세트로 이동 */}
                 {pageEnd < totalPages && (
                   <button onClick={handleNextPageSet} className="px-3 py-1">
                     →
@@ -233,7 +223,6 @@ const ChartPage = () => {
         </div>
       </section>
       <section className="col-span-4 p-4 bg-white">
-        {/* 오른쪽 필터 부분 */}
         <h2 className="text-2xl font-bold mb-4">플레이 리스트</h2>
         <div className="border border-gray_border rounded-md shadow-md">
           {[
@@ -243,6 +232,10 @@ const ChartPage = () => {
             "주간 Top 50 글로벌",
             "최신 노래 한국",
             "Anima R&B",
+            "Jazz for Sleep",
+            "K Pop Dance",
+            "All-Time Highest Rated Songs",
+            "Today’s Hit",
           ].map((tab) => (
             <button
               key={tab}
