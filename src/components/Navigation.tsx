@@ -4,22 +4,22 @@ const Navigation = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="flex items-center justify-around">
+    <nav className="flex items-center justify-around px-8">
       <div>
-        <a
-          href="chart"
+        <button
+          onClick={() => navigate("/chart")}
           className="font-bold text-gray_dark hover:text-coral whitespace-nowrap truncate"
         >
           차트
-        </a>
+        </button>
       </div>
       <div>
-        <a
-          href="newmusic"
+        <button
+          onClick={() => navigate("/newmusic")}
           className="font-bold text-gray_dark hover:text-coral whitespace-nowrap truncate"
         >
           최신 트랙
-        </a>
+        </button>
       </div>
     </nav>
   );
