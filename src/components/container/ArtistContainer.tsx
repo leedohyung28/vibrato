@@ -1,43 +1,25 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import spotifyLogo from "../../assets/spotify.png";
 import CommentModal from "../../components/CommentModal";
 import Favorites from "../../components/Favorites";
 import buttonReply from "../../assets/Reply.png";
 import { StarRating } from "../../components/StarRating";
 
-interface Track {
+interface Artist {
   name: string;
   image_url: string;
-  artist_names: string[];
-  release_date: string;
+  genres?: string[];
   spotify_url: string;
-  track_number: number;
-  duration: number;
   avg_rated?: number;
   count_rated?: number;
   liked?: boolean;
-  preview?: string;
-  album: {
-    id: number;
-    name: string;
-    spotify_url: string;
-    avg_rated?: number;
-    liked?: boolean;
-  };
-  artists: {
-    id: string;
-    name: string;
-    spotify_url: string;
-    liked?: boolean;
-  };
 }
 
-interface TrackContainerProps {
-  trackData: Track;
+interface ArtistContainerProps {
+  artistData: Artist;
 }
 
-const TrackContainer: React.FC<TrackContainerProps> = ({ trackData }) => {
+const ArtistContainer: React.FC<ArtistContainerProps> = ({ artistData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -50,44 +32,24 @@ const TrackContainer: React.FC<TrackContainerProps> = ({ trackData }) => {
   return (
     <>
       <section className="col-span-4">
-        {/* 코멘트 모달 */}
-        {isModalOpen && (
-          <CommentModal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            onSubmit={(comment: string) => console.log(comment)}
-          />
-        )}
-        {/* 1. 트랙 이미지 섹션 */}
+        {/* 1. 앨범 이미지 섹션 */}
         <img
-          src={trackData.image_url}
+          src={artistData.image_url}
           alt="track cover"
           className="w-full h-auto rounded-md border drop-shadow-md"
         />
       </section>
       <section className="col-span-8">
-        {/* 2. 트랙 정보 및 상호작용 섹션 */}
+        {/* 2. 앨범 정보 및 상호작용 섹션 */}
         <div className="flex flex-col justify-between h-full w-full">
-          <h1 className="ml-2 text-3xl font-bold">{trackData.name}</h1>
-          {trackData.artists.map((artist, index) => (
-            <Link key={artist.id} to={`/artist/${artist.id}`}>
-              <h1 className="ml-2 text-2xl font-bold text-gray_dark">
-                {artist.name}
-              </h1>
-              {index < trackData.artists.length - 1 && ", "}
-            </Link>
-          ))}
-          <Link to={`/album/${trackData.album.id}`}>
-            {" "}
-            <h1 className="ml-2 text-xl font-bold text-gray_dark">
-              {trackData.album.name}
-            </h1>
-          </Link>
-
+          <h1 className="ml-2 text-3xl font-bold">{artistData.name}</h1>
           <p className="ml-2 text-gray_dark text-xl">
-            ★ {trackData.avg_rated} / 5.0 | 🗎 {trackData.count_rated}
+            {artistData.genres.join(", ")}
           </p>
-          <a href={trackData.spotify_url} target="_blank">
+          <p className="ml-2 text-gray_dark text-xl">
+            ★ {artistData.avg_rated} / 5.0 | 🗎 {artistData.count_rated}
+          </p>
+          <a href={"https://www.spotify.com"} target="_blank">
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"
@@ -112,8 +74,16 @@ const TrackContainer: React.FC<TrackContainerProps> = ({ trackData }) => {
           </div>
         </div>
       </section>
+      {/* 3. 코멘트 모달 */}
+      {isModalOpen && (
+        <CommentModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={(comment: string) => console.log(comment)}
+        />
+      )}
     </>
   );
 };
 
-export default TrackContainer;
+export default ArtistContainer;

@@ -8,7 +8,8 @@ const Logo = () => {
         <img
           src={logo}
           alt="Vibrato Logo"
-          className="w-full h-auto max-w-[150px] max-h-[75px]"
+          className="min-w-[120px] max-w-[120px] h-auto"
+          style={{ aspectRatio: "374 / 169" }}
         />
       </Link>
     </div>

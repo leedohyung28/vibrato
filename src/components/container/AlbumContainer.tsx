@@ -4,25 +4,38 @@ import CommentModal from "../CommentModal";
 import Favorites from "../Favorites";
 import buttonReply from "../../assets/Reply.png";
 import { StarRating } from "../StarRating";
+import { Link } from "react-router-dom";
 
-interface AlbumContainerProps {
+interface Album {
   name: string;
   image_url: string;
-  artists: string;
+  artist_names: string[];
+  genres?: string[];
   release_date: string;
+  total_tracks: number[];
   spotify_url: string;
-  avg_rated: number;
-  genres: string;
+  avg_rated?: number;
+  count_rated?: number;
+  liked?: boolean;
+  tracks: {
+    id: string;
+    name: string;
+    spotify_url: string;
+    track_number: number;
+    liked?: boolean;
+  };
+  artists: {
+    id: string;
+    name: string;
+    spotify_url: string;
+    liked: boolean;
+  };
+}
+interface AlbumContainerProps {
+  albumData: Album;
 }
 
-const AlbumContainer: React.FC<AlbumContainerProps> = ({
-  name,
-  image_url,
-  artists,
-  release_date,
-  spotify_url,
-  avg_rated,
-}) => {
+const AlbumContainer: React.FC<AlbumContainerProps> = ({ albumData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -45,23 +58,28 @@ const AlbumContainer: React.FC<AlbumContainerProps> = ({
         )}
         {/* 1. 앨범 이미지 섹션 */}
         <img
-          src={image_url}
-          alt={name}
+          src={albumData.image_url}
+          alt="album cover"
           className="w-full h-auto rounded-md border drop-shadow-md"
         />
       </section>
       <section className="col-span-8">
         {/* 2. 앨범 정보 및 상호작용 섹션 */}
         <div className="flex flex-col justify-between h-full w-full">
-          <h1 className="ml-2 text-3xl font-bold">{name}</h1>
-          <h1 className="ml-2 text-2xl font-bold text-gray_dark">{artists}</h1>
+          <h1 className="ml-2 text-3xl font-bold">{albumData.name}</h1>
+          {albumData.artists.map((artist, index) => (
+            <Link key={artist.id} to={`/artist/${artist.id}`}>
+              <h1 className="ml-2 text-2xl font-bold text-gray_dark">
+                {artist.name}
+              </h1>
+              {index < albumData.artists.length - 1 && ", "}
+            </Link>
+          ))}
+
           <p className="ml-2 text-gray_dark text-xl">
-            {release_date}
+            ★ {albumData.avg_rated} / 5.0 | 🗎 {albumData.count_rated}
           </p>
-          <p className="ml-2 text-gray_dark text-xl">
-            ★ {avg_rated} / 5.0 | 🗎 ratingCount
-          </p>
-          <a href={spotify_url} target="_blank">
+          <a href={albumData.spotify_url} target="_blank">
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"
