@@ -46,8 +46,9 @@ const PopularCommentSection = () => {
     const fetchReviews = async () => {
       try {
         setLoading(true); // 로딩 시작
-        const data = await getAllReviews(); // API로 리뷰 데이터 가져오기
-        setReviews(data); // 데이터 상태에 저장
+        const data = await getAllReviews();
+        const sortedData = data.sort((a, b) => b.numOfLikes - a.numOfLikes); // API로 리뷰 데이터 가져오기
+        setReviews(sortedData);
 
         const initialLikedState = data.reduce((acc, review) => {
           acc[review.review_id] = review.liked || false;
