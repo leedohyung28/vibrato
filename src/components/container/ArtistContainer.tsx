@@ -17,9 +17,10 @@ interface Artist {
 
 interface ArtistContainerProps {
   artistData: Artist;
+  artistID: string | undefined;
 }
 
-const ArtistContainer: React.FC<ArtistContainerProps> = ({ artistData }) => {
+const ArtistContainer: React.FC<ArtistContainerProps> = ({ artistData, artistID }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -32,6 +33,18 @@ const ArtistContainer: React.FC<ArtistContainerProps> = ({ artistData }) => {
   return (
     <>
       <section className="col-span-4">
+        {/* 3. 코멘트 모달 */}
+        {isModalOpen && (
+          <CommentModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSubmit={(comment: string) => console.log(comment)}
+            Image={artistData.image_url}
+            Title={artistData.name}
+            // SubTitle={artistData.artist_names[0]}
+            TypeID={artistID}
+          />
+        )}
         {/* 1. 앨범 이미지 섹션 */}
         <img
           src={artistData.image_url}
@@ -74,14 +87,6 @@ const ArtistContainer: React.FC<ArtistContainerProps> = ({ artistData }) => {
           </div>
         </div>
       </section>
-      {/* 3. 코멘트 모달 */}
-      {isModalOpen && (
-        <CommentModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={(comment: string) => console.log(comment)}
-        />
-      )}
     </>
   );
 };

@@ -33,9 +33,10 @@ interface Album {
 }
 interface AlbumContainerProps {
   albumData: Album;
+  albumID: string | undefined;
 }
 
-const AlbumContainer: React.FC<AlbumContainerProps> = ({ albumData }) => {
+const AlbumContainer: React.FC<AlbumContainerProps> = ({ albumData, albumID }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -54,6 +55,10 @@ const AlbumContainer: React.FC<AlbumContainerProps> = ({ albumData }) => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onSubmit={(comment: string) => console.log(comment)}
+            Image={albumData.image_url}
+            Title={albumData.name}
+            SubTitle={albumData.artist_names[0]}
+            TypeID={albumID}
           />
         )}
         {/* 1. 앨범 이미지 섹션 */}

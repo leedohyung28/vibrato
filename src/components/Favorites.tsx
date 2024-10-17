@@ -64,4 +64,4 @@ const Favorites: React.FC<FavoritesProps> = ({ onClose }) => {
   );
 };
 
-export default Favorites;
+export default Favorites
