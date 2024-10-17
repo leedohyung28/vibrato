@@ -35,22 +35,15 @@ export default defineConfig(() => {
           target: "https://vibrato1.shop",
           changeOrigin: true,
         },
+        "/newmusic": {
+          target: "https://vibrato1.shop",
+          changeOrigin: true,
+        },
       },
     },
     base: "",
     define: {
-      VITE_API_BASE_URL: JSON.stringify(
-        process.env.VITE_API_BASE_URL || "https://vibrato1.shop"
-      ),
-      VITE_SPOTIFY_CLIENT_ID: JSON.stringify(
-        process.env.VITE_SPOTIFY_CLIENT_ID || ""
-      ),
-      VITE_SPOTIFY_CLIENT_SECRET: JSON.stringify(
-        process.env.VITE_SPOTIFY_CLIENT_SECRET || ""
-      ),
-      VITE_SPOTIFY_REDIRECT_URI: JSON.stringify(
-        process.env.VITE_SPOTIFY_REDIRECT_URI || ""
-      ),
+      VITE_API_BASE_URL: JSON.stringify("https://vibrato1.shop"),
     },
   };
 });

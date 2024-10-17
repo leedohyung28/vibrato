@@ -59,8 +59,6 @@ interface Track {
   liked?: boolean;
 }
 
-const API_BASE_URL = "https://vibrato1.shop";
-
 // 전체 검색
 export const useSearchAll = (searchContent: string) => {
   const [artists, setArtists] = useState<Artist[]>([]);
@@ -105,9 +103,7 @@ export const useSearchTracks = (searchContent: string) => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const response = await axios.put(
-          `${API_BASE_URL}/search/tracks/${searchContent}`
-        );
+        const response = await axios.put(`/search/tracks/${searchContent}`);
 
         const { tracks } = response.data;
 
@@ -136,9 +132,7 @@ export const useSearchArtists = (searchContent: string) => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const response = await axios.put(
-          `${API_BASE_URL}/search/artists/${searchContent}`
-        );
+        const response = await axios.put(`/search/artists/${searchContent}`);
 
         const { artists } = response.data;
 
@@ -167,9 +161,7 @@ export const useSearchAlbums = (searchContent: string) => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const response = await axios.put(
-          `${API_BASE_URL}/search/albums/${searchContent}`
-        );
+        const response = await axios.put(`/search/albums/${searchContent}`);
 
         const { albums } = response.data;
 
