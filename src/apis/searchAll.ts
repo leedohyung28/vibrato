@@ -59,7 +59,7 @@ interface Track {
   liked?: boolean;
 }
 
-const API_BASE_URL = "https://vibrato1.shop";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // 전체 검색
 export const useSearchAll = (searchContent: string) => {

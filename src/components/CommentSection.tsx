@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface TypeId {
-  typeID: string;
+  typeID: string | undefined;
 }
 
-const CommentSection: React.FC<TypeId> = ({ typeID }) => {
+const CommentSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
   // 하드 코딩된 데이터
   const comments = [
     {
@@ -44,7 +44,10 @@ const CommentSection: React.FC<TypeId> = ({ typeID }) => {
   ];
 
   const navigate = useNavigate();
-  const handleMoreClick = (typeID: string) => {
+  // const handleMoreClick = (typeID: string) => {
+  //   navigate(`/Review/${typeID}`);
+  // };
+  const handleMoreClick = () => {
     navigate(`/Review/${typeID}`);
   };
 
@@ -79,7 +82,8 @@ const CommentSection: React.FC<TypeId> = ({ typeID }) => {
           <h2 className="text-2xl font-bold">코멘트</h2>
           <button
             className="text-gray_dark hover:text-coral"
-            onClick={() => handleMoreClick(typeID)}
+            // onClick={() => handleMoreClick(typeID)}
+            onClick={() => handleMoreClick()}
           >
             더보기
           </button>

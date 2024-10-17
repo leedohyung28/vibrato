@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // 리뷰에 대한 전체 코멘트 불러오기
 export const getComments = async (reviewID: string) => {
   try {
     const response = await axios.get(
-      `https://vibrato1.shop/review/${reviewID}/comments`
+      `${API_BASE_URL}/review/${reviewID}/comments`
     );
     console.log("리뷰에 대한 전체 댓글 가져오기 성공");
     console.log(response.data);

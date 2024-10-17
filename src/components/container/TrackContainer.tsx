@@ -35,9 +35,10 @@ interface Track {
 
 interface TrackContainerProps {
   trackData: Track;
+  trackID: string | undefined;
 }
 
-const TrackContainer: React.FC<TrackContainerProps> = ({ trackData }) => {
+const TrackContainer: React.FC<TrackContainerProps> = ({ trackData, trackID }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -56,6 +57,10 @@ const TrackContainer: React.FC<TrackContainerProps> = ({ trackData }) => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onSubmit={(comment: string) => console.log(comment)}
+            Image={trackData.image_url}
+            Title={trackData.name}
+            SubTitle={trackData.album.name}
+            TypeID={trackID}
           />
         )}
         {/* 1. 트랙 이미지 섹션 */}

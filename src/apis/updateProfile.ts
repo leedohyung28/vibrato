@@ -6,6 +6,8 @@ export interface updateRequest {
   token: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const updateProfile = async ({
   token,
   profileImageUrl,
@@ -13,7 +15,7 @@ export const updateProfile = async ({
 }: updateRequest) => {
   try {
     const response = await axios.put(
-      "https://vibrato1.shop/auth/edit",
+      `${API_BASE_URL}//auth/edit`,
       {
         profileImage: profileImageUrl,
         nickname: nickname,

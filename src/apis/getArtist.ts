@@ -12,6 +12,8 @@ interface Artist {
   liked?: boolean;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useGetArtist = (query: string) => {
   const [artist, setArtist] = useState<Artist | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,7 +23,7 @@ export const useGetArtist = (query: string) => {
     const fetchArtist = async () => {
       try {
         const response = await axios.put(
-          `https://vibrato1.shop/search/single/artist/${query}`
+          `${API_BASE_URL}/search/single/artist/${query}`
         );
         setArtist(response.data);
       } catch (error: any) {

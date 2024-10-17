@@ -23,7 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Chart" element={<Chart />} />
-          <Route path="/charts/recent/korea" element={<NewMusicPage />} />
+          <Route path="/newmusic" element={<NewMusicPage />} />
           <Route path="/Artist/:query" element={<Artist />} />
           <Route path="/Album/:query" element={<Album />} />
           <Route path="/Track/:query" element={<Track />} />

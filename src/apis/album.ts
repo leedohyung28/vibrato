@@ -1,9 +1,11 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const getAlbumInfo = async (albumId: string) => {
   try {
     const response = await axios.put(
-      `https://vibrato1.shop/search/single/album/${albumId}`
+      `${API_BASE_URL}/search/single/album/${albumId}`
     );
 
     // console.log("response", response);

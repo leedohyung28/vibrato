@@ -29,6 +29,8 @@ interface Track {
   };
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useGetTrack = (query: string) => {
   const [track, setTrack] = useState<Track | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +42,7 @@ export const useGetTrack = (query: string) => {
         console.log(`Fetching track for query: ${query}`);
 
         const response = await axios.put(
-          `https://vibrato1.shop/search/single/track/${query}`
+          `${API_BASE_URL}/search/single/track/${query}`
         );
 
         console.log("API Response:", response.data);
@@ -72,12 +74,9 @@ export const useGetRestTrack = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.put(
-          `https://vibrato1.shop/search/rest/tracks`,
-          {
-            type_id: query,
-          }
-        );
+        const response = await axios.put(`${API_BASE_URL}/search/rest/tracks`, {
+          type_id: query,
+        });
 
         console.log("API Response:", response.data);
 

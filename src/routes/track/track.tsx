@@ -25,7 +25,7 @@ const Track: React.FC = () => {
 
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
-      {track && <TrackContainer trackData={track} />}
+      {track && <TrackContainer trackData={track} trackID={query}/>}
       <CommentSection typeID={query} />
       <RestTrackList typeID={query} track_image_url={track?.image_url} />
     </div>
