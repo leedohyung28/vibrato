@@ -3,6 +3,7 @@ import spotifyLogo from "../../assets/spotify.png";
 import { renderStars } from "../StarRating";
 import { getAllReviews } from "../../apis/review";
 import { getTypeInfo } from "../../apis/getTypeInfo";
+import { Link } from "react-router-dom";
 
 interface Comment {
   comment_id: number;
@@ -184,7 +185,7 @@ const PopularCommentSection = () => {
     }
   };
 
-  const renderTypeData = (reviewId: number) => {
+  const renderTypeData = (reviewId: number, type_id: string) => {
     const typeInfo = typeData[reviewId];
     if (!typeInfo) return <p>데이터를 불러오는 중...</p>;
 
@@ -193,7 +194,10 @@ const PopularCommentSection = () => {
       case "track":
         return (
           <>
-            <h4 className="font-bold text-lg truncate">{data.name}</h4>
+            <Link to={`/track/${type_id}`}>
+              <h4 className="font-bold text-lg truncate">{data.name}</h4>
+            </Link>
+
             <p className="font-semibold text-gray_dark truncate">
               {data.artist_names.join(", ")}
             </p>
@@ -215,7 +219,9 @@ const PopularCommentSection = () => {
       case "album":
         return (
           <>
-            <h4 className="font-bold text-lg truncate">{data.name}</h4>
+            <Link to={`/album/${type_id}`}>
+              <h4 className="font-bold text-lg truncate">{data.name}</h4>
+            </Link>
             <p className="font-semibold text-gray_dark truncate">
               {data.artist_names.join(", ")}
             </p>
@@ -237,7 +243,9 @@ const PopularCommentSection = () => {
       case "artist":
         return (
           <>
-            <h4 className="font-bold text-lg truncate">{data.name}</h4>
+            <Link to={`/artist/${type_id}`}>
+              <h4 className="font-bold text-lg truncate">{data.name}</h4>
+            </Link>
             <p className="font-semibold text-gray_dark">
               ★ {data.avg_rated} / 5.0 | 🗎 {data.count_rated}
             </p>
@@ -299,7 +307,7 @@ const PopularCommentSection = () => {
             </div>
             <div className="mb-4 flex">
               <div className="flex flex-col w-40">
-                {renderTypeData(review.review_id)}
+                {renderTypeData(review.review_id, review.type_id)}
                 {/* 트랙, 앨범, 아티스트 정보 렌더링 */}
               </div>
               <div className="ml-4 flex-grow">
