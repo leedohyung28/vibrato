@@ -47,7 +47,8 @@ export interface Album {
 }
 
 // API Base URL 설정
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://vibrato1.shop";
 
 // 새로운 플레이리스트 API 추가
 export const fetchJazzForSleepChart = async (
