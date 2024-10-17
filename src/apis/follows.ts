@@ -1,9 +1,11 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const follow = async (type_id: string, token: string | null) => {
   try {
     const response = await axios.post(
-      "/follows",
+      `${API_BASE_URL}/follows`,
       { type_id: type_id },
       {
         headers: {

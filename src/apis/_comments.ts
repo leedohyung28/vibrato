@@ -33,12 +33,16 @@ export interface ReviewResponse {
   likes: Like[];
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // 리뷰 데이터를 불러오는 API 함수
 export const fetchReviews = async (
   type_id: string
 ): Promise<ReviewResponse[]> => {
   try {
-    const response = await axios.get<ReviewResponse[]>(`/reviews/${type_id}`);
+    const response = await axios.get<ReviewResponse[]>(
+      `${API_BASE_URL}/reviews/${type_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("리뷰 데이터를 불러오는 중 오류가 발생했습니다.", error);

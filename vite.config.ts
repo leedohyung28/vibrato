@@ -23,16 +23,20 @@ export default defineConfig(() => {
           target: "http://localhost:8080",
           changeOrigin: true,
         },
-        '/follows': {
-          target: 'http://localhost:8080',
+        "/follows": {
+          target: "http://localhost:8080",
           changeOrigin: true,
         },
-        '/reviews': {
-          target: 'http://localhost:8080',
+        "/reviews": {
+          target: "http://localhost:8080",
           changeOrigin: true,
         },
-        '/review': {
-          target: 'http://localhost:8080',
+        "/review": {
+          target: "http://localhost:8080",
+          changeOrigin: true,
+        },
+        "/newmusic": {
+          target: "http://localhost:8080",
           changeOrigin: true,
         },
       },
@@ -40,16 +44,7 @@ export default defineConfig(() => {
     base: "",
     define: {
       VITE_API_BASE_URL: JSON.stringify(
-        process.env.VITE_API_BASE_URL || "localhost:8080"
-      ),
-      VITE_SPOTIFY_CLIENT_ID: JSON.stringify(
-        process.env.VITE_SPOTIFY_CLIENT_ID || ""
-      ),
-      VITE_SPOTIFY_CLIENT_SECRET: JSON.stringify(
-        process.env.VITE_SPOTIFY_CLIENT_SECRET || ""
-      ),
-      VITE_SPOTIFY_REDIRECT_URI: JSON.stringify(
-        process.env.VITE_SPOTIFY_REDIRECT_URI || ""
+        process.env.VITE_API_BASE_URL || "http://localhost:8080"
       ),
     },
   };

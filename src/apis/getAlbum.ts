@@ -28,6 +28,8 @@ interface Album {
   };
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useGetAlbum = (query: string) => {
   const [album, setAlbum] = useState<Album | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,7 +40,9 @@ export const useGetAlbum = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.put(`/search/single/album/${query}`);
+        const response = await axios.put(
+          `${API_BASE_URL}/search/single/album/${query}`
+        );
 
         console.log("API Response:", response.data);
 

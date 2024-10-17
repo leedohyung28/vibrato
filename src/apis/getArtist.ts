@@ -12,6 +12,8 @@ interface Artist {
   liked?: boolean;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useGetArtist = (query: string) => {
   const [artist, setArtist] = useState<Artist | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,7 +22,9 @@ export const useGetArtist = (query: string) => {
   useEffect(() => {
     const fetchArtist = async () => {
       try {
-        const response = await axios.put(`/search/single/artist/${query}`);
+        const response = await axios.put(
+          `${API_BASE_URL}/search/single/artist/${query}`
+        );
         setArtist(response.data);
       } catch (error: any) {
         console.error("API error:", error);

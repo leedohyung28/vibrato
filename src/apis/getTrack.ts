@@ -29,6 +29,8 @@ interface Track {
   };
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useGetTrack = (query: string) => {
   const [track, setTrack] = useState<Track | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,7 +41,9 @@ export const useGetTrack = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.put(`/search/single/track/${query}`);
+        const response = await axios.put(
+          `${API_BASE_URL}/search/single/track/${query}`
+        );
 
         console.log("API Response:", response.data);
 
@@ -70,7 +74,7 @@ export const useGetRestTrack = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.put(`/search/rest/tracks`, {
+        const response = await axios.put(`${API_BASE_URL}/search/rest/tracks`, {
           type_id: query,
         });
 
