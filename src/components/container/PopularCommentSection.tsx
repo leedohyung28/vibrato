@@ -300,7 +300,7 @@ const PopularCommentSection = () => {
                 {renderStars(review.rated)} {/* 별점 */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-coral border shadow-md"></span>
+                    <span className="w-10 h-10 rounded-full bg-coral border shadow-md" />
                     <h3 className="font-bold text-lg ml-2">
                       {review.nickname}
                     </h3>
