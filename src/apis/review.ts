@@ -31,6 +31,25 @@ export const getSpecificReview = async (reviewId: string) => {
       throw error;
     }
   };
+
+
+// 전체 리뷰 가져오기
+export const getAllReviews = async () => {
+    try {
+      const token = getToken();
+      const response = await axios.get(`/reviews/all`, {
+        headers: {
+          // Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("리뷰 목록을 가져오는 데 실패했습니다.");
+      throw error;
+    }
+};
   
 
 // 리뷰 작성
