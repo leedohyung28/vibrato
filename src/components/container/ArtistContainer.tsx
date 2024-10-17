@@ -49,7 +49,7 @@ const ArtistContainer: React.FC<ArtistContainerProps> = ({ artistData }) => {
           <p className="ml-2 text-gray_dark text-xl">
             ★ {artistData.avg_rated} / 5.0 | 🗎 {artistData.count_rated}
           </p>
-          <a href={"https://www.spotify.com"} target="_blank">
+          <a href={artistData.spotify_url} target="_blank">
             <img
               src={spotifyLogo}
               alt="스포티파이 로고"

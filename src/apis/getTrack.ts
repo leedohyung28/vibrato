@@ -60,4 +60,35 @@ export const useGetTrack = (query: string) => {
   return { track, loading, error };
 };
 
-export default useGetTrack;
+export const useGetRestTrack = (query: string) => {
+  const [restTrack, setRestTrack] = useState<Track | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTrack = async () => {
+      try {
+        console.log(`Fetching track for query: ${query}`);
+
+        const response = await axios.put(`/search/rest/tracks`, {
+          type_id: query,
+        });
+
+        console.log("API Response:", response.data);
+
+        setRestTrack(response.data);
+      } catch (error: any) {
+        console.error("API error:", error);
+        setError(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (query) {
+      fetchTrack();
+    }
+  }, [query]);
+
+  return { restTrack, loading, error };
+};

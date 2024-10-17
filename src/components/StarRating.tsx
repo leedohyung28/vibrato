@@ -1,21 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StarEmpty from "../assets/StarEmpty.png";
 import StarHalf from "../assets/StarHalf.png";
 import StarFull from "../assets/StarFull.png";
+import { useAuthStore } from "../store/authStore";
+import logo from "../assets/Logo.png";
 
 interface StarRatingProps {
   initialRating: number;
   onRate: (rating: number) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ initialRating, onRate }) => {
+const StarRating: React.FC<StarRatingProps> = ({
+  initialRating,
+  onRate,
+  onClose,
+}) => {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [showLoginAlert, setShowLoginAlert] = useState<boolean>(false);
+  const [isFading, setIsFading] = useState<boolean>(false);
+  const { isLoggedIn } = useAuthStore();
   const [selectedRating, setSelectedRating] = useState<number>(initialRating); // 선택된 별점 저장
 
   const handleClick = (rating: number) => {
-    setSelectedRating(rating); // 클릭 시 선택된 별점 고정
-    onRate(rating);
+    if (isLoggedIn) {
+      setSelectedRating(rating);
+      onRate(rating);
+      setShowLoginAlert(true);
+      setIsFading(true);
+    } else {
+      setShowLoginAlert(true);
+      setIsFading(true);
+    }
   };
+
+  useEffect(() => {
+    if (showLoginAlert) {
+      const timer = setTimeout(() => {
+        setIsFading(false);
+        const closeTimer = setTimeout(() => {
+          setShowLoginAlert(false);
+          if (onClose) onClose();
+        }, 500);
+        return () => clearTimeout(closeTimer);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showLoginAlert, onClose]);
 
   const handleMouseEnter = (rating: number) => {
     setHoverRating(rating); // 마우스 오버 시 임시 별점 설정
@@ -39,37 +71,51 @@ const StarRating: React.FC<StarRatingProps> = ({ initialRating, onRate }) => {
   };
 
   return (
-    <div className="flex gap-1 items-center">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <div key={star} className="relative w-16 drop-shadow-md ">
-          {/* 반 별 클릭 영역 */}
-          <button
-            onClick={() => handleClick(star - 0.5)}
-            onMouseEnter={() => handleMouseEnter(star - 0.5)}
-            onMouseLeave={handleMouseLeave}
-            className="absolute left-0 w-1/2 h-full"
-          ></button>
-          {/* 전체 별 클릭 영역 */}
-          <button
-            onClick={() => handleClick(star)}
-            onMouseEnter={() => handleMouseEnter(star)}
-            onMouseLeave={handleMouseLeave}
+    <>
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <div key={star} className="relative w-16 drop-shadow-md ">
+            {/* 반 별 클릭 영역 */}
+            <button
+              onClick={() => handleClick(star - 0.5)}
+              onMouseEnter={() => handleMouseEnter(star - 0.5)}
+              onMouseLeave={handleMouseLeave}
+              className="absolute left-0 w-1/2 h-full"
+            ></button>
+            {/* 전체 별 클릭 영역 */}
+            <button
+              onClick={() => handleClick(star)}
+              onMouseEnter={() => handleMouseEnter(star)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <img
+                src={getStarImage(star)}
+                alt={`${star} star`}
+                className="object-contain w-16"
+              />
+            </button>
+          </div>
+        ))}
+      </div>
+      {!isLoggedIn && showLoginAlert && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div
+            className={`bg-white p-6 rounded-lg shadow-lg w-72 flex flex-col text-center items-center transition-opacity duration-500 ease-in-out ${
+              isFading ? "opacity-100" : "opacity-0"
+            }`}
           >
-            <img
-              src={getStarImage(star)}
-              alt={`${star} star`}
-              className="object-contain w-16"
-            />
-          </button>
+            <img src={logo} alt="Logo" className="w-24 h-auto mb-5 mx-auto" />
+            <p>로그인이 필요한 기능입니다.</p>
+          </div>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 };
 
 const renderStars = (rating: number) => {
   return (
-    <div className="w-full flex space-x-1">
+    <div className="flex">
       {[1, 2, 3, 4, 5].map((star) => {
         // 별의 소수점 비율을 계산
         const fillPercentage = Math.min(

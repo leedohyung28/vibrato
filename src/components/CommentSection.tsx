@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface TypeId {
-  typeID : string
+  typeID: string;
 }
 
 const CommentSection: React.FC<TypeId> = ({ typeID }) => {
@@ -48,47 +48,98 @@ const CommentSection: React.FC<TypeId> = ({ typeID }) => {
     navigate(`/Review/${typeID}`);
   };
 
+  // 각 댓글마다 좋아요 토글 상태와 댓글창 토글 상태 관리
+  const [likedComments, setLikedComments] = useState<{
+    [key: number]: boolean;
+  }>({});
+  const [expandedComments, setExpandedComments] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  // 좋아요 토글
+  const toggleLike = (id: number) => {
+    setLikedComments((prevLikedComments) => ({
+      ...prevLikedComments,
+      [id]: !prevLikedComments[id],
+    }));
+  };
+
+  // 댓글창 토글
+  const toggleReplySection = (id: number) => {
+    setExpandedComments((prevExpandedComments) => ({
+      ...prevExpandedComments,
+      [id]: !prevExpandedComments[id],
+    }));
+  };
+
   return (
     <section className="col-span-4">
-      {/* 3. 코멘트 섹션 */}
       <div className="flex flex-col justify-between">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">코멘트</h2>
-          <button className="text-gray_dark hover:text-coral" onClick={() => handleMoreClick(typeID)}>더보기</button>
+          <button
+            className="text-gray_dark hover:text-coral"
+            onClick={() => handleMoreClick(typeID)}
+          >
+            더보기
+          </button>
         </div>
         {/* 코멘트 내용 */}
-        {comments.map((replies) => (
-          <div className="border border-gray_border p-4 rounded-lg mt-4 shadow-md">
-            <div className="flex items-center justify-between">
-              <div className="flex space-x-2">
-                <span className="w-8 h-8 rounded-full bg-coral"></span>
-                <p className="text-lg font-bold">{replies.user_nickname}</p>
+        {comments.map((replies) => {
+          const isLiked = likedComments[replies.id] || false;
+          const isExpanded = expandedComments[replies.id] || false;
+          return (
+            <div
+              key={replies.id}
+              className="border border-gray_border p-4 rounded-lg mt-4 shadow-md"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex space-x-2">
+                  <span className="w-8 h-8 rounded-full bg-coral"></span>
+                  <p className="text-lg font-bold">{replies.user_nickname}</p>
+                </div>
+                <p className="text-sm text-gray_dark font-bold mr-2">
+                  {replies.title}
+                </p>
               </div>
-              <p className="text-sm text-gray_dark font-bold mr-2">
-                {replies.title}
+              <hr className="my-2 shadow" />
+              <p className="mx-2 text-lg font-bold">{replies.title}</p>
+              <p className="mx-2 text-gray_dark font-semibold">
+                {replies.content}
               </p>
-            </div>
-            <hr className="my-2 shadow" />
-            <p className="mx-2 text-lg font-bold">{replies.title}</p>
-            <p className="mx-2 text-gray_dark font-semibold">
-              {replies.content}
-            </p>
-            <span className="m-2 font-bold">★ {replies.rated} / 5.0</span>
-            <div className="mt-4 flex">
-              <div className="flex items-center mr-8 text-gray_dark">
-                <button className="font-bold">
-                  좋아요 👍︎ {replies.likes}
-                </button>
+              <span className="m-2 font-bold">★ {replies.rated} / 5.0</span>
+              <div className="mt-4 flex">
+                {/* 좋아요 버튼 */}
+                <div className="flex items-center mr-8 text-gray_dark truncate">
+                  <button
+                    className={`font-bold ${
+                      isLiked ? "text-coral" : "text-gray_dark"
+                    }`}
+                    onClick={() => toggleLike(replies.id)}
+                  >
+                    좋아요 👍︎
+                    {isLiked ? replies.likes + 1 : replies.likes}
+                  </button>
+                </div>
+                {/* 댓글 버튼 */}
+                <div className="flex items-center">
+                  <button
+                    className="font-bold text-gray_dark"
+                    onClick={() => toggleReplySection(replies.id)}
+                  >
+                    댓글 🗨️ {replies.replies}
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center">
-                <button className="font-bold text-gray_dark">
-                  댓글 🗨️ {replies.replies}
-                </button>
-                {/* 댓글 버튼 누르면 댓글창 토글되게 코드 추가 필요 */}
-              </div>
+              {/* 댓글창 */}
+              {isExpanded && (
+                <div className="mt-4 bg-gray-100 p-4 rounded-md">
+                  <p className="text-sm text-gray_dark">댓글이 없습니다.</p>
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

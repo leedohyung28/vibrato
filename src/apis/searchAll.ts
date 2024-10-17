@@ -4,7 +4,7 @@ import axios from "axios";
 // Artist 타입 정의
 interface Artist {
   name: string;
-  id: number;
+  id: string;
   image_url: string;
   spotify_url: string;
   avg_rated?: number;
@@ -16,10 +16,10 @@ interface Artist {
 // Album 타입 정의
 interface Album {
   name: string;
-  id: number;
+  id: string;
   artists_name: string[];
   album_artists: {
-    id: number;
+    id: string;
     name: string;
     spotify_url: string;
     count_rated: number;
@@ -37,18 +37,18 @@ interface Album {
 // Track 타입 정의
 interface Track {
   name: string;
-  id: number;
+  id: string;
   artists_name: string[];
   image_url: string;
   spotify_url: string;
   preview?: string;
-  album_id: number;
+  album_id: string;
   album_name: string;
   release_date: string;
   duration: number;
   album_spotify_url: string;
   album_artists: {
-    id: number;
+    id: string;
     name: string;
     spotify_url: string;
     count_rated?: number;
@@ -59,6 +59,7 @@ interface Track {
   liked?: boolean;
 }
 
+// 전체 검색
 export const useSearchAll = (searchContent: string) => {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -91,4 +92,89 @@ export const useSearchAll = (searchContent: string) => {
   return { artists, albums, tracks, loading, error };
 };
 
-export default useSearchAll;
+// 트랙 검색
+export const useSearchTracks = (searchContent: string) => {
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.put(`/search/tracks/${searchContent}`);
+
+        const { tracks } = response.data;
+
+        setTracks(Array.isArray(tracks) ? tracks : []);
+      } catch (error: any) {
+        setError(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (searchContent) {
+      fetchSearchResults();
+    }
+  }, [searchContent]);
+
+  return { tracks, loading, error };
+};
+
+// 아티스트 검색
+export const useSearchArtists = (searchContent: string) => {
+  const [artists, setArtists] = useState<Artist[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.put(`/search/artists/${searchContent}`);
+
+        const { artists } = response.data;
+
+        setArtists(Array.isArray(artists) ? artists : []);
+      } catch (error: any) {
+        setError(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (searchContent) {
+      fetchSearchResults();
+    }
+  }, [searchContent]);
+
+  return { artists, loading, error };
+};
+
+// 앨범 검색
+export const useSearchAlbums = (searchContent: string) => {
+  const [albums, setTracks] = useState<Track[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.put(`/search/albums/${searchContent}`);
+
+        const { albums } = response.data;
+
+        setTracks(Array.isArray(albums) ? albums : []);
+      } catch (error: any) {
+        setError(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (searchContent) {
+      fetchSearchResults();
+    }
+  }, [searchContent]);
+
+  return { albums, loading, error };
+};

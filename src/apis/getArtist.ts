@@ -20,12 +20,7 @@ export const useGetArtist = (query: string) => {
   useEffect(() => {
     const fetchArtist = async () => {
       try {
-        console.log(`Fetching track for query: ${query}`);
-
         const response = await axios.put(`/search/single/artist/${query}`);
-
-        console.log("API Response:", response.data);
-
         setArtist(response.data);
       } catch (error: any) {
         console.error("API error:", error);

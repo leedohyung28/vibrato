@@ -17,6 +17,7 @@ import {
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
 import spotifyLogo from "../../assets/spotify.png";
+import Favorites from "../../components/Favorites";
 
 const ChartPage = () => {
   const [chartData, setChartData] = useState<Track[]>([]);
@@ -140,7 +141,7 @@ const ChartPage = () => {
         <div className="flex">
           <div className="flex-1 my-4">
             {Array.isArray(paginatedData) && paginatedData.length > 0 ? (
-              paginatedData.map((item) => (
+              paginatedData.map((item, index) => (
                 <div
                   key={item.id}
                   className="relative flex mb-4 p-4 border border-gray_border shadow-md rounded-md"
@@ -148,12 +149,12 @@ const ChartPage = () => {
                   <img
                     src={item.image_url}
                     alt={item.album_name}
-                    className="w-32 h-32 mr-4 cursor-pointer"
+                    className="w-32 h-32 mr-4 cursor-pointer drop-shadow-md rounded-md"
                     onClick={() => navigate(`/track/${item.id}`)} // 이미지 클릭 시 이동
                   />
                   <div className="flex flex-col h-32 w-full justify-between">
                     <h3
-                      className="text-xl font-semibold cursor-pointer"
+                      className="text-2xl font-bold cursor-pointer truncate"
                       onClick={() => navigate(`/track/${item.id}`)} // 제목 클릭 시 이동
                     >
                       {item.name}
@@ -161,30 +162,37 @@ const ChartPage = () => {
                     <div>
                       {item.album_artists.map((artist) => (
                         <span
-                          className="text-sm text-gray_dark"
+                          className="font-semibold text-gray_dark cursor-pointer"
+                          onClick={() => navigate(`/artist/${artist.id}`)}
                           key={artist.id}
                         >
                           {artist.name}
                         </span>
                       ))}
                     </div>
-                    <p className="text-sm text-gray_dark">
-                      발매일: {item.release_date}
+                    <p className="font-semibold text-gray_dark">
+                      {item.release_date}
                     </p>
-                    <a
-                      href={item.album_spotify_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={spotifyLogo}
-                        alt="스포티파이 로고"
-                        className="w-6 h-6 rounded-full"
-                      />
-                    </a>
+                    <div className="flex gap-2 items-center">
+                      <a
+                        href={item.album_spotify_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-6 h-6"
+                      >
+                        <img
+                          src={spotifyLogo}
+                          alt="스포티파이 로고"
+                          className="w-6 h-6 rounded-full"
+                        />
+                      </a>
+                      <span className="w-7 h-7">
+                        <Favorites />
+                      </span>
+                    </div>
                   </div>
-                  <p className="absolute bottom-2 right-2 text-sm text-gray_dark">
-                    ⭐︎ {item.avg_rated} / 5.0 | 평가수 {item.count_rated}
+                  <p className="absolute bottom-4 right-4 font-semibold text-gray_dark">
+                    ⭐︎ {item.avg_rated} / 5.0 | 🗎 {item.count_rated}
                   </p>
                 </div>
               ))

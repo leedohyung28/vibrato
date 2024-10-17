@@ -26,7 +26,7 @@ const Album: React.FC = () => {
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       {album && <AlbumContainer albumData={album} />}
-      <CommentSection typeID={query}/>
+      <CommentSection typeID={query} />
       <TrackList albumData={album} />
     </div>
   );

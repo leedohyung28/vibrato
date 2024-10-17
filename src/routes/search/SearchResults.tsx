@@ -1,24 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useSearchAll } from "../../apis/searchAll";
 import Favorites from "../../components/Favorites";
 import spotifyLogo from "../../assets/spotify.png";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const SearchResults: React.FC = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("query");
 
-  const { artists, albums, tracks } = useSearchAll(query || "");
+  const { artists, albums, tracks, loading, error } = useSearchAll(query || "");
+
+  // 추가: 각 섹션의 전체보기 상태
+  const [showAllTracks, setShowAllTracks] = useState(false);
+  const [showAllArtists, setShowAllArtists] = useState(false);
+  const [showAllAlbums, setShowAllAlbums] = useState(false);
+
+  if (loading) {
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <ErrorMessage message={error} />;
+  }
+
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       <div className="col-span-12">
         <h2 className="text-2xl font-bold mb-6">{query}에 대한 검색 결과</h2>
+
         {/* 트랙 섹션 */}
         <>
           <h2 className="text-xl font-bold mb-4">트랙</h2>
           <div>
-            {tracks.slice(0, 5).map((track) => (
+            {(showAllTracks ? tracks : tracks.slice(0, 5)).map((track) => (
               <div key={track.id} className="flex border-b items-center">
                 <div className="flex flex-row items-center space-x-2">
                   <img
@@ -59,13 +80,23 @@ const SearchResults: React.FC = () => {
                 </div>
               </div>
             ))}
+            {/* 더보기 버튼 */}
+            {tracks.length > 5 && (
+              <button
+                className="m-2 text-md text-gray_dark font-bold hover:text-coral"
+                onClick={() => setShowAllTracks(!showAllTracks)}
+              >
+                {showAllTracks ? "접기" : "더보기"}
+              </button>
+            )}
           </div>
         </>
+
         {/* 아티스트 섹션 */}
         <>
           <h2 className="text-xl font-bold mb-4 mt-4">아티스트</h2>
           <div>
-            {artists.slice(0, 5).map((artist) => (
+            {(showAllArtists ? artists : artists.slice(0, 5)).map((artist) => (
               <div key={artist.id} className="flex border-b items-center">
                 <div className="flex flex-row items-center space-x-2">
                   <img
@@ -98,6 +129,15 @@ const SearchResults: React.FC = () => {
                 </div>
               </div>
             ))}
+            {/* 더보기 버튼 */}
+            {artists.length > 5 && (
+              <button
+                className="m-2 text-md text-gray_dark font-bold hover:text-coral"
+                onClick={() => setShowAllArtists(!showAllArtists)}
+              >
+                {showAllArtists ? "접기" : "더보기"}
+              </button>
+            )}
           </div>
         </>
 
@@ -105,18 +145,17 @@ const SearchResults: React.FC = () => {
         <>
           <h2 className="text-xl font-bold mb-4 mt-4">앨범</h2>
           <div>
-            {albums.slice(0, 5).map((album) => (
+            {(showAllAlbums ? albums : albums.slice(0, 5)).map((album) => (
               <div key={album.id} className="flex border-b items-center">
                 <div className="flex flex-row items-center space-x-2">
                   <img
                     src={album.image_url}
-                    alt="Song Cover"
+                    alt="Album Cover"
                     className="p-2 w-20 h-20 rounded"
                   />
                   <Link to={`/album/${album.id}`}>
                     <p className="text-lg font-bold">{album.name}</p>
                   </Link>
-
                   {album.album_artists.map((artist, index) => (
                     <Link key={artist.id} to={`/artist/${artist.id}`}>
                       <p className="text-sm font-semibold text-gray_dark inline">
@@ -147,6 +186,15 @@ const SearchResults: React.FC = () => {
                 </div>
               </div>
             ))}
+            {/* 더보기 버튼 */}
+            {albums.length > 5 && (
+              <button
+                className="m-2 text-md text-gray_dark font-bold hover:text-coral"
+                onClick={() => setShowAllAlbums(!showAllAlbums)}
+              >
+                {showAllAlbums ? "접기" : "더보기"}
+              </button>
+            )}
           </div>
         </>
       </div>
