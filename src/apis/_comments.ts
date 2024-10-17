@@ -38,7 +38,9 @@ export const fetchReviews = async (
   type_id: string
 ): Promise<ReviewResponse[]> => {
   try {
-    const response = await axios.get<ReviewResponse[]>(`/reviews/${type_id}`);
+    const response = await axios.get<ReviewResponse[]>(
+      `https://vibrato1.shop/reviews/${type_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("리뷰 데이터를 불러오는 중 오류가 발생했습니다.", error);

@@ -13,7 +13,7 @@ export const signup = async ({
   nickname,
   idToken,
 }: SignupRequest) => {
-  const response = await fetch("/auth/join", {
+  const response = await fetch("https://vibrato1.shop/auth/join", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export const signup = async ({
 export const getUserInfo = async ({ idToken }: Token) => {
   console.log(idToken);
 
-  const response = await fetch("/auth/login", {
+  const response = await fetch("https://vibrato1.shop/auth/login", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${idToken}`,

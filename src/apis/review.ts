@@ -3,7 +3,7 @@ import axios from "axios";
 // 리뷰 리스트 가져오기
 export const getReviews = async (typeId: string) => {
   try {
-    const response = await axios.get(`/reviews/${typeId}`);
+    const response = await axios.get(`https://vibrato1.shop/reviews/${typeId}`);
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -11,7 +11,6 @@ export const getReviews = async (typeId: string) => {
     throw error;
   }
 };
-
 
 // 댓글 작성
 export const postComment = async (reviewId: string, comment: string) => {

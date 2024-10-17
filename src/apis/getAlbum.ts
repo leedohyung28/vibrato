@@ -38,7 +38,9 @@ export const useGetAlbum = (query: string) => {
       try {
         console.log(`Fetching track for query: ${query}`);
 
-        const response = await axios.put(`/search/single/album/${query}`);
+        const response = await axios.put(
+          `https://vibrato1.shop/search/single/album/${query}`
+        );
 
         console.log("API Response:", response.data);
 

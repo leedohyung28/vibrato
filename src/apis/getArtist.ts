@@ -20,7 +20,9 @@ export const useGetArtist = (query: string) => {
   useEffect(() => {
     const fetchArtist = async () => {
       try {
-        const response = await axios.put(`/search/single/artist/${query}`);
+        const response = await axios.put(
+          `https://vibrato1.shop/search/single/artist/${query}`
+        );
         setArtist(response.data);
       } catch (error: any) {
         console.error("API error:", error);
