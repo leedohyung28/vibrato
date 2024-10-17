@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import dotenv from "dotenv";
 
+// .env 파일에서 환경 변수 로드 (로컬 개발 시 사용)
 dotenv.config();
 
 export default defineConfig(() => {
@@ -16,27 +17,27 @@ export default defineConfig(() => {
     server: {
       proxy: {
         "/auth": {
-          target: "https://vibrato1.shop",
+          target: process.env.VITE_API_BASE_URL || "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/search": {
-          target: "https://vibrato1.shop",
+          target: process.env.VITE_API_BASE_URL || "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/follows": {
-          target: "https://vibrato1.shop",
+          target: process.env.VITE_API_BASE_URL || "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/reviews": {
-          target: "https://vibrato1.shop",
+          target: process.env.VITE_API_BASE_URL || "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/review": {
-          target: "https://vibrato1.shop",
+          target: process.env.VITE_API_BASE_URL || "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/newmusic": {
-          target: "https://vibrato1.shop",
+          target: process.env.VITE_API_BASE_URL || "https://vibrato1.shop",
           changeOrigin: true,
         },
       },
