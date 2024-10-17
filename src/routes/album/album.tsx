@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import AlbumContainer from "../../components/container/AlbumContainer";
-import CommentSection from "../../components/CommentSection";
 import TrackList from "../../components/TrackList";
 import { useGetAlbum } from "../../apis/getAlbum";
 import ErrorMessage from "../../components/ErrorMessage";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import ReviewSection from "../../components/ReviewSection";
 
 const Album: React.FC = () => {
   const { query } = useParams<{ query: string }>();
@@ -26,7 +26,7 @@ const Album: React.FC = () => {
   return (
     <div className="container mx-auto grid grid-cols-12 px-5 gap-10">
       {album && <AlbumContainer albumData={album} albumID={query} />}
-      <CommentSection typeID={query} />
+      <ReviewSection typeID={query} />
       <TrackList albumData={album} />
     </div>
   );

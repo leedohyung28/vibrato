@@ -20,6 +20,19 @@ export const getReviews = async (typeId: string) => {
   }
 };
 
+// 특정 리뷰 가져오기
+export const getSpecificReview = async (reviewId: string) => {
+    try {
+      const response = await axios.get(`/reviews/review/${reviewId}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("특정 리뷰 내용을 가져오는 데 실패했습니다.");
+      throw error;
+    }
+  };
+  
+
 // 리뷰 작성
 export const postReview = async ({rated, title, reviewContent, typeId}: Review) => {
     try {

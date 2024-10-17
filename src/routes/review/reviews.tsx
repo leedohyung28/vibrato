@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getReviews } from "../../apis/review";
+// import useGetAlbum from "../../apis/getAlbum";
+// import { useGetTrack } from "../../apis/getTrack";
+// import useGetArtist from "../../apis/getArtist";
 
 interface ReviewList {
   review_list: Review[];
@@ -32,6 +35,7 @@ interface Like {
   liked_at: string;
 }
 
+
 const Reviews: React.FC = () => {
   const [reviews, setReviews] = useState<ReviewList | null>(null);
   const [sortOrder, setSortOrder] = useState<"인기순" | "추천순" | "최신순">(
@@ -46,6 +50,10 @@ const Reviews: React.FC = () => {
   const handleCommentClick = (reviewID: string) => {
     navigate(`/Review/${reviewID}/Comments`);
   };
+
+//   const { artist } = useGetArtist(typeID || "");
+//   const { album } = useGetAlbum(typeID || "");
+//   const { track } = useGetTrack(typeID || "");
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -100,13 +108,27 @@ const Reviews: React.FC = () => {
     console.log(`댓글 보기 토글, 코멘트 ID: ${commentId}`);
   };
 
+  const convertToKST = (dateString: string): string => {
+    const date = new Date(dateString);  // API에서 받은 날짜 문자열을 Date 객체로 변환
+    date.setHours(date.getHours() + 9);  // 9시간 추가하여 한국 시간으로 변경
+    return date.toLocaleString();  // 한국 로컬 시간으로 변환한 문자열 반환
+  };
+  
+
   return (
     <div className="p-4">
       {/* {reviews && reviews.length > 0 ? ( */}
       {reviews ? (
-        <>
+        <div className="container mx-auto grid-cols-12 px-5 gap-10">
+
           {/* 1. 아티스트 이름 */}
-          <h1 className="text-3xl font-bold">{` 000에 대한 리뷰`}</h1>
+          {/* <h1 className="text-3xl font-bold">{`
+            ${album && album.name || track && track.name || artist && artist.name} 에 대한 리뷰
+        `}</h1> */}
+        <h1 className="text-3xl font-bold">{`
+            리뷰
+        `}</h1>
+    
   
           {/* 2. 정렬 버튼 */}
           <div className="flex justify-end mb-4">
@@ -128,11 +150,11 @@ const Reviews: React.FC = () => {
               onClick={() => {handleCommentClick(review.review_id)}}
             >
               {/* 3. 아티스트 이미지 */}
-              <img
+              {/* <img
                 src={review.profileImage}
                 alt={review.artistName}
                 className="w-20 h-20 mr-4"
-              />
+              /> */}
   
               {/* 4. 아티스트 별점 */}
               <div className="flex flex-col w-full">
@@ -142,14 +164,17 @@ const Reviews: React.FC = () => {
                 </div>
   
                 {/* 5. 코멘트 남긴 사람의 프로필 */}
-                <div className="flex items-center mt-2">
-                  <img
+                <div className="flex items-center mt-4">
+                  {/* <img
                     src={review.userProfile}
                     alt="User"
                     className="w-10 h-10 rounded-full mr-2"
-                  />
-                  <p>{review.timeAgo}</p>
+                  /> */}
+                  <span className="w-5 h-5 rounded-full bg-light_coral"></span>
+                  <p className="text-m ml-2 font-bold">{review.nickname}</p>
                 </div>
+
+                <p className="text-xs mt-2">{convertToKST(review.created_at)}</p>
   
                 {/* 8. 코멘트 내용 */}
                 <p className="mt-2">
@@ -162,7 +187,7 @@ const Reviews: React.FC = () => {
                     className="text-blue-500 flex items-center"
                     onClick={() => handleLike(review.id)}
                   >
-                    <span>👍</span>
+                    <span>👍 좋아요</span>
                     <span className="ml-2">{review.likes.length}</span>
                   </button>
   
@@ -178,7 +203,7 @@ const Reviews: React.FC = () => {
               </div>
             </div>
           ))}
-        </>
+        </div>
       ) : (
         <div>리뷰가 없습니다</div> // 리뷰가 없을 때 렌더링
       )}
