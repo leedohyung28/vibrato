@@ -16,27 +16,27 @@ export default defineConfig(() => {
     server: {
       proxy: {
         "/auth": {
-          target: "http://localhost:8080",
+          target: "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/search": {
-          target: "http://localhost:8080",
+          target: "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/follows": {
-          target: "http://localhost:8080",
+          target: "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/reviews": {
-          target: "http://localhost:8080",
+          target: "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/review": {
-          target: "http://localhost:8080",
+          target: "https://vibrato1.shop",
           changeOrigin: true,
         },
         "/newmusic": {
-          target: "http://localhost:8080",
+          target: "https://vibrato1.shop",
           changeOrigin: true,
         },
       },
@@ -44,7 +44,7 @@ export default defineConfig(() => {
     base: "",
     define: {
       VITE_API_BASE_URL: JSON.stringify(
-        process.env.VITE_API_BASE_URL || "http://localhost:8080"
+        process.env.VITE_API_BASE_URL || "https://vibrato1.shop"
       ),
     },
   };
