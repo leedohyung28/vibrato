@@ -1,29 +1,13 @@
+import { fetchKoreaRecentTracks } from "../../apis/chat";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // axios 추가
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
 import spotifyLogo from "../../assets/spotify.png";
 import Favorites from "../../components/Favorites";
 
-// charts/korea/recent API 연결
-const fetchRecentKpopTracks = async (): Promise<Track[]> => {
-  try {
-    const response = await axios.put(
-      `${import.meta.env.VITE_API_BASE_URL}/charts/korea/recent`,
-      {
-        limit: "100", // 필요한 만큼 limit 설정
-        offset: "0",
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("최신 Kpop 트랙을 가져오는 데 실패했습니다:", error);
-    throw new Error("최신 Kpop 트랙을 가져오는 데 실패했습니다.");
-  }
-};
-
+// Track 타입 정의
 export interface Track {
   id: string;
   name: string;
@@ -55,12 +39,13 @@ const RecentKpopPage = () => {
 
   const navigate = useNavigate(); // useNavigate 훅 사용
 
+  // chat.ts에서 fetchKoreaRecentTracks 사용하여 최신 Kpop 트랙 가져오기
   const fetchTracks = useCallback(async () => {
     setLoading(true);
     setError("");
 
     try {
-      const data = await fetchRecentKpopTracks(); // API 호출을 통해 최신 음악 데이터 가져오기
+      const data = await fetchKoreaRecentTracks(); // chat.ts에서 가져온 API 함수 사용
       setChartData(data);
     } catch (err) {
       setError("데이터를 가져오는 데 실패했습니다.");
