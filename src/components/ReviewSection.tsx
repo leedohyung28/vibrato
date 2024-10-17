@@ -8,9 +8,13 @@ interface TypeId {
 
 const ReviewSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
   const [reviews, setReviews] = useState<any[]>([]); // 리뷰 데이터를 상태로 관리
-  const [likedComments, setLikedComments] = useState<{ [key: number]: boolean }>({});
-  const [expandedComments, setExpandedComments] = useState<{ [key: number]: boolean }>({});
-  
+  const [likedComments, setLikedComments] = useState<{
+    [key: number]: boolean;
+  }>({});
+  const [expandedComments, setExpandedComments] = useState<{
+    [key: number]: boolean;
+  }>({});
+
   const navigate = useNavigate();
 
   // 비동기 함수 호출을 useEffect 내에서 처리
@@ -36,14 +40,16 @@ const ReviewSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
   const timeAgo = (dateString: string) => {
     const now = new Date();
     const createdAt = new Date(dateString);
-  
+
     const adjustedCreatedAt = new Date(createdAt.getTime() + 9 * 3600 * 1000);
-  
-    const diff = Math.floor((now.getTime() - adjustedCreatedAt.getTime()) / 1000);
-  
+
+    const diff = Math.floor(
+      (now.getTime() - adjustedCreatedAt.getTime()) / 1000
+    );
+
     const hours = Math.floor(diff / 3600);
     const minutes = Math.floor(diff / 60);
-  
+
     if (hours < 1) {
       return `${minutes}분 전`;
     } else if (hours < 24) {
@@ -52,7 +58,7 @@ const ReviewSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
       const days = Math.floor(hours / 24);
       return `${days}일 전`;
     }
-  };  
+  };
 
   // 좋아요 토글 함수
   const toggleLike = (id: number) => {
@@ -119,7 +125,7 @@ const ReviewSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
                       onClick={() => toggleLike(review.id)}
                     >
                       좋아요
-                      <span className="ml-1 mr-1">👍︎</span> 
+                      <span className="ml-1 mr-1">👍︎</span>
                       {isLiked ? review.likes + 1 : review.likes}
                     </button>
                   </div>
@@ -143,7 +149,9 @@ const ReviewSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
             );
           })
         ) : (
-          <p>리뷰가 없습니다.</p>
+          <div className="flex justify-center ">
+            <p className="font-bold text-xl text-g">리뷰가 없습니다.</p>
+          </div>
         )}
       </div>
     </section>
@@ -151,10 +159,6 @@ const ReviewSection: React.FC<TypeId> = ({ typeID }: TypeId) => {
 };
 
 export default ReviewSection;
-
-
-
-
 
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";

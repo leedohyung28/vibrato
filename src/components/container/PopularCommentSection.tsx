@@ -4,6 +4,8 @@ import { renderStars } from "../StarRating";
 import { getAllReviews } from "../../apis/review";
 import { getTypeInfo } from "../../apis/getTypeInfo";
 import { Link } from "react-router-dom";
+import ErrorMessage from "../../components/ErrorMessage";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface Comment {
   comment_id: number;
@@ -266,11 +268,15 @@ const PopularCommentSection = () => {
   };
 
   if (loading) {
-    return <p>로딩 중...</p>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <p className="col-span-8">{error}</p>;
+    return <ErrorMessage message={error} />;
   }
 
   return (
