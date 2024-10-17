@@ -43,7 +43,9 @@ export default defineConfig(() => {
     },
     base: "",
     define: {
-      VITE_API_BASE_URL: JSON.stringify("https://vibrato1.shop"),
+      VITE_API_BASE_URL: JSON.stringify(
+        process.env.VITE_API_BASE_URL || "https://vibrato1.shop"
+      ),
     },
   };
 });
