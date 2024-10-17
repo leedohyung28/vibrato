@@ -47,7 +47,7 @@ const RestTrackList: React.FC<RestTrackListProps> = ({
           {restTrack.map((track) => (
             <div
               key={track.id}
-              className="flex justify-between border-b items-center"
+              className="flex justify-between border-b items-center cursor-pointer hover:bg-very_light_coral"
             >
               <div className="flex flex-row items-center space-x-2">
                 <img

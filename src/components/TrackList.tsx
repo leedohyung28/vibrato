@@ -40,7 +40,7 @@ const TrackList: React.FC<TrackListProps> = ({ albumData }) => {
           {albumData.tracks.map((track) => (
             <div
               key={track.id}
-              className="flex justify-between border-b items-center"
+              className="flex justify-between border-b items-center cursor-pointer hover:bg-very_light_coral"
             >
               <div className="flex flex-row items-center space-x-2">
                 {/* 앨범 이미지가 없으므로 앨범 전체 이미지를 사용하거나 기본값 설정 */}
