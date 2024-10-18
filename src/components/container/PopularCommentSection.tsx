@@ -4,6 +4,8 @@ import { renderStars } from "../StarRating";
 import { getAllReviews } from "../../apis/review";
 import { getTypeInfo } from "../../apis/getTypeInfo";
 import { Link } from "react-router-dom";
+import ErrorMessage from "../../components/ErrorMessage";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface Comment {
   comment_id: number;
@@ -266,11 +268,15 @@ const PopularCommentSection = () => {
   };
 
   if (loading) {
-    return <p>로딩 중...</p>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <p className="col-span-8">{error}</p>;
+    return <ErrorMessage message={error} />;
   }
 
   return (
@@ -294,7 +300,7 @@ const PopularCommentSection = () => {
                 {renderStars(review.rated)} {/* 별점 */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-coral border shadow-md"></span>
+                    <span className="w-10 h-10 rounded-full bg-coral border shadow-md" />
                     <h3 className="font-bold text-lg ml-2">
                       {review.nickname}
                     </h3>

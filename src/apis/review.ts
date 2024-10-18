@@ -25,9 +25,12 @@ export const getReviews = async (typeId: string) => {
 // 특정 리뷰 가져오기
 export const getSpecificReview = async (reviewId: string) => {
   try {
-    const response = await axios.get(
-      `${API_BASE_URL}/reviews/review/${reviewId}`
-    );
+    const token = getToken();
+    const response = await axios.get(`/reviews/review/${reviewId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -85,21 +88,81 @@ export const postReview = async ({
   }
 };
 
-// 댓글 작성
-export const postComment = async (reviewId: string, comment: string) => {
+// 리뷰 좋아요
+export const likeReview = async (review_id: string) => {
   try {
+    const token = getToken();
     const response = await axios.post(
-      `${API_BASE_URL}/review/${reviewId}/comments`,
-      { content: comment },
+      `${API_BASE_URL}/likes/review`,
+      {
+        review_id: review_id,
+      },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
     return response.data;
   } catch (error) {
-    console.error("댓글 작성에 실패했습니다.");
+    console.error("리뷰 좋아요에 실패했습니다.");
     throw error;
   }
 };
+
+// 리뷰 좋아요 취소
+export const unlikeReview = async (review_id: string) => {
+  try {
+    const token = getToken();
+    const response = await axios.delete(`${API_BASE_URL}/likes/review`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        review_id: review_id,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("리뷰 좋아요 취소에 실패했습니다.");
+    throw error;
+  }
+};
+
+// 리뷰 좋아요 눌렀는지 여부 조회
+export const whetherLikedReview = async (review_id: string) => {
+  try {
+    const token = getToken();
+    const response = await axios.get(
+      `${API_BASE_URL}/likes/review/${review_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("리뷰 좋아요 여부 조회에 실패했습니다.");
+    throw error;
+  }
+};
+
+// 댓글 작성
+// export const postComment = async (reviewId: string, comment: string) => {
+//   try {
+//     const response = await axios.post(
+//       `${API_BASE_URL}/review/${reviewId}/comments`,
+//       { content: comment },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error("댓글 작성에 실패했습니다.");
+//     throw error;
+//   }
+// };

@@ -12,6 +12,7 @@ module.exports = {
         searchBar: "#EEEEEE",
         coral: "#C07777",
         light_coral: "#DAB6B6",
+        very_light_coral: "#e7dada",
         white: "#FFFFFF",
         black: "#000000",
         yellow: "#FFAF01",
