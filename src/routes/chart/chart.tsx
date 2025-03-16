@@ -160,13 +160,14 @@ const ChartPage = () => {
                       {item.name}
                     </h3>
                     <div>
-                      {item.album_artists.map((artist) => (
+                      {item.album_artists.map((artist, index) => (
                         <span
                           className="font-semibold text-gray_dark cursor-pointer"
                           onClick={() => navigate(`/artist/${artist.id}`)}
                           key={artist.id}
                         >
                           {artist.name}
+                          {index < item.album_artists.length - 1 && ", "}
                         </span>
                       ))}
                     </div>
